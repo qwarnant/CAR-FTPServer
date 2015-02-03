@@ -10,6 +10,8 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpUserRequest extends FtpRequest {
 
+	private String username;
+
 	public FtpUserRequest(Socket socket) {
 		super(socket);
 	}
@@ -17,8 +19,7 @@ public class FtpUserRequest extends FtpRequest {
 	@Override
 	public FtpResponse process() throws IOException {
 		// Get the input stream
-		InputStreamReader isr = new InputStreamReader(
-				socket.getInputStream());
+		InputStreamReader isr = new InputStreamReader(socket.getInputStream());
 		BufferedReader br = new BufferedReader(isr);
 
 		// Read the request type
@@ -33,9 +34,15 @@ public class FtpUserRequest extends FtpRequest {
 					FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
 		}
 
+		this.username = username;
+
 		return new FtpResponse(FtpConstants.FTP_RESPONSE_NEED_USER_CODE,
 				FtpConstants.FTP_RESPONSE_NEED_USER_MSG);
 
+	}
+
+	public String getResultUsername() {
+		return this.username;
 	}
 
 }

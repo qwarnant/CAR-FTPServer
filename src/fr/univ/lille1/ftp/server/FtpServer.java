@@ -1,16 +1,10 @@
 package fr.univ.lille1.ftp.server;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
-import fr.univ.lille1.ftp.server.request.FtpRequest;
-import fr.univ.lille1.ftp.server.request.FtpUserRequest;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpServer {
@@ -19,11 +13,9 @@ public class FtpServer {
 	 * TODO : TYPE A => transfert suivant en texte & TYPE I => transfert suivant en binaire
 	 */
 		
-	private ServerSocket serverSocket;
-	
-	private String ftpDirectory;
+	private static ServerSocket serverSocket;
+	private static String ftpDirectory;
 
-	
 	private FtpServer(String ftpDirectory, int ftpPort) throws IOException {
 		this.ftpDirectory = ftpDirectory;
 		this.serverSocket = new ServerSocket(ftpPort);
@@ -48,7 +40,6 @@ public class FtpServer {
 			throw new IllegalArgumentException("Usage : todo");
 		}
 		
-		
 		FtpServer server = null;
 		
 		try {
@@ -59,7 +50,8 @@ public class FtpServer {
 				// Accept a new connection and say hello to our lucky user
 				Socket newSocket = FtpServer.acceptConnection();
 				
-				server.handleInputRequest();
+				// Custom thread for our new client
+				new FtpThread(newSocket).run();
 			}
 
 		} catch (IOException e) {

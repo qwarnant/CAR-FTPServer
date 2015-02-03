@@ -1,18 +1,23 @@
 package fr.univ.lille1.ftp.server;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.univ.lille1.ftp.server.request.FtpPassRequest;
 import fr.univ.lille1.ftp.server.request.FtpRequest;
+import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.server.request.FtpUserRequest;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpThread extends Thread {
 
+	private String username;
+	
 	private Socket socket;
 	private List<FtpRequest> history;
 
@@ -24,7 +29,10 @@ public class FtpThread extends Thread {
 
 	public void storeAndExecute(FtpRequest request) throws IOException {
 		history.add(request);
-		request.process();
+		FtpResponse response = request.process();
+		
+		DataOutputStream br = new DataOutputStream(socket.getOutputStream());
+		br.writeBytes(response.getCode() + " " + response.getMessage());
 	}
 
 	@Override
@@ -44,22 +52,25 @@ public class FtpThread extends Thread {
 			BufferedReader br = new BufferedReader(isr);
 
 			// Read the request type
-			String s = br.readLine().substring(0, 4);
-			s.trim();
-			System.out.println("Receive request : " + s);
+			String command = br.readLine().substring(0, 4);
+			command.trim();
+			System.out.println("Receive request : " + command);
 
-			if (s.equals(FtpConstants.FTP_CMD_USER)) {
+			if (command.equals(FtpConstants.FTP_CMD_USER)) {
 
 				// Make a USER request
-				FtpRequest ruser = new FtpUserRequest(socket);
+				FtpUserRequest ruser = new FtpUserRequest(socket);
 				this.storeAndExecute(ruser);
+				this.username = ruser.getResultUsername();
 
-			} else if (s.equals(FtpConstants.FTP_CMD_PSWD)) {
+			} else if (command.equals(FtpConstants.FTP_CMD_PASS)) {
 
-				// Make a PSWD request
-				// TODO
+				// Make a PASS request
+				FtpRequest rpass = new FtpPassRequest(socket, this.username);
+				this.storeAndExecute(rpass);
 
 			} else {
+				//TODO custom exception
 				throw new IllegalArgumentException("Bad request name"); // Bad
 																		// request
 			}

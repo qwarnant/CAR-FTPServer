@@ -6,14 +6,15 @@ public interface FtpConstants {
 	public static final int FTP_SERVER_PORT = 1024;
 	
 	public static final String FTP_CMD_USER = "USER";
-	public static final String FTP_CMD_PSWD = "PSWD";
+	public static final String FTP_CMD_PASS = "PSWD";
 	
 	
 
+
+	public static final int FTP_RESPONSE_LOGIN_OK_CODE = 230;
+	public static final String FTP_RESPONSE_LOGIN_OK_MSG = "User logged in, proceed. Logged out if appropriate.";
 	public static final int FTP_RESPONSE_NEED_USER_CODE = 331;
 	public static final String FTP_RESPONSE_NEED_USER_MSG = "User name okay, need password.";
-	
-	
 	
 	public static final int FTP_ERROR_INVALID_USER_PWD_CODE = 430;
 	public static final String FTP_ERROR_INVALID_USER_PWD_MSG = "Invalid username or password";
