@@ -1,48 +1,45 @@
 package fr.univ.lille1.ftp.server.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
-
 import fr.univ.lille1.ftp.server.FtpUserManager;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
+import java.io.IOException;
+
 public class FtpUserRequest extends FtpRequest {
 
-	private String username;
+    private String username;
 
-	public FtpUserRequest(Socket socket) {
-		super(socket);
-	}
+    public FtpUserRequest(String commandLine) {
+        super(commandLine);
+    }
 
-	@Override
-	public FtpResponse process() throws IOException {
-		// Get the input stream
-		InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-		BufferedReader br = new BufferedReader(isr);
+    @Override
+    public FtpResponse process() throws IOException {
+        // Get the user name
+        String username = this.commandLine.substring(5, commandLine.length());
 
-		// Read the request type
-		String line = br.readLine();
+        if (!FtpUserManager.getInstance().containsUser(username)) {
+            return new FtpResponse(
+                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_CODE,
+                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
+        }
 
-		// Get the user name
-		String username = line.substring(5, line.length());
+        this.username = username;
 
-		if (!FtpUserManager.getInstance().containsUser(username)) {
-			return new FtpResponse(
-					FtpConstants.FTP_ERROR_INVALID_USER_PWD_CODE,
-					FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
-		}
+        // Anonymous connection
+        if (this.username.equals(FtpConstants.FTP_ANONYMOUS_NAME)) {
+            return new FtpResponse(
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_ANONYM_PASS_MSG);
+        }
 
-		this.username = username;
+        return new FtpResponse(FtpConstants.FTP_REP_NEED_USER_CODE,
+                FtpConstants.FTP_REP_NEED_USER_MSG);
 
-		return new FtpResponse(FtpConstants.FTP_RESPONSE_NEED_USER_CODE,
-				FtpConstants.FTP_RESPONSE_NEED_USER_MSG);
+    }
 
-	}
-
-	public String getResultUsername() {
-		return this.username;
-	}
+    public String getResultUsername() {
+        return this.username;
+    }
 
 }

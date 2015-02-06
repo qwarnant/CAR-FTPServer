@@ -10,38 +10,37 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpPassRequest extends FtpRequest {
 
-	private String username;
+    private String username;
 
-	public FtpPassRequest(Socket socket, String username) {
-		super(socket);
-		this.username = username;
-	}
+    public FtpPassRequest(String commandLine, String username) {
+        super(commandLine);
+        this.username = username;
+    }
 
-	@Override
-	public FtpResponse process() throws IOException {
-		
-		if(this.username == null) {
-			//TODO 
-		}
-		
-		// Get the input stream
-		InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-		BufferedReader br = new BufferedReader(isr);
+    @Override
+    public FtpResponse process() throws IOException {
 
-		// Read the request type
-		String line = br.readLine();
+        if (this.username == null) {
+            //TODO
+        }
 
-		// Get the user name
-		String password = line.substring(5, line.length());
+        // Get the user name
+        String password = this.commandLine.substring(5, this.commandLine.length());
 
-		if (!FtpUserManager.getInstance().checkPassword(username, password)) {
-			return new FtpResponse(
-					FtpConstants.FTP_ERROR_INVALID_USER_PWD_CODE,
-					FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
-		}
+        if (!FtpUserManager.getInstance().checkPassword(username, password)) {
+            return new FtpResponse(
+                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_CODE,
+                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
+        }
 
-		return new FtpResponse(FtpConstants.FTP_RESPONSE_LOGIN_OK_CODE,
-				FtpConstants.FTP_RESPONSE_LOGIN_OK_MSG);
-	}
+        if (this.username.equals(FtpConstants.FTP_ANONYMOUS_NAME)) {
+            return new FtpResponse(
+                    FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                    FtpConstants.FTP_REP_ANONYM_LOGIN_OK_MSG);
+        }
+
+        return new FtpResponse(FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                FtpConstants.FTP_REP_LOGIN_OK_MSG);
+    }
 
 }

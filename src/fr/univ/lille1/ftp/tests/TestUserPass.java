@@ -25,7 +25,7 @@ public class TestUserPass {
 
 	@Test
 	public void testUserCommandOk() {
-		assertTrue(true);
+		assertTrue(false);
 	}
 	
 	@Test

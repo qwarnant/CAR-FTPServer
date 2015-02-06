@@ -17,4 +17,9 @@ public class FtpResponse {
 	public String getMessage() {
 		return this.message;
 	}
+
+    @Override
+    public String toString() {
+        return this.getCode() + " " + this.getMessage() + "\n";
+    }
 }

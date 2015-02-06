@@ -5,10 +5,10 @@ import java.net.Socket;
 
 public abstract class FtpRequest {
 
-	protected Socket socket;
+	protected String commandLine;
 
-	public FtpRequest(Socket socket) {
-		this.socket = socket;
+	public FtpRequest(String commandLine) {
+		this.commandLine = commandLine;
 	}
 
 	public abstract FtpResponse process() throws IOException;
