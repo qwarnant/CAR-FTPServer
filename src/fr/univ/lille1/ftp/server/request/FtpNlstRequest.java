@@ -27,6 +27,9 @@ public class FtpNlstRequest extends FtpRequest {
             targetDirectory = FtpServer.getFtpDirectory();
         }
 
+
+
+
         return new FtpResponse(0, "");
     }
 }
