@@ -1,11 +1,9 @@
 package fr.univ.lille1.ftp.server;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpServer {

@@ -2,8 +2,8 @@
 .settings
 .classpath
 bin/
-bin1/
 .idea
 CAR-FTPServer.iml
 lib/
+out/
 

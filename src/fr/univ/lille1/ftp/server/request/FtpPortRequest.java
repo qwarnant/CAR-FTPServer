@@ -33,7 +33,7 @@ public class FtpPortRequest extends FtpRequest {
 
         return new FtpResponse(
                 FtpConstants.FTP_REP_CMD_OK,
-                "PORT " + FtpConstants.FTP_REP_CMD_MSG);
+                FtpConstants.FTP_CMD_PORT + " " + FtpConstants.FTP_REP_CMD_MSG);
     }
 
     public int getRemotePort() {

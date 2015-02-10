@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import fr.univ.lille1.ftp.util.FtpConstants;
+
 /**
  * Created by Warnant on 09-02-15.
  */
@@ -28,7 +30,7 @@ public class FtpPortManager {
 
     public int getNewPort() {
 
-        int min = 1025;
+        int min = FtpConstants.FTP_SERVER_PORT + 1;
         int max = 65535;
         int portNum = 0;
 

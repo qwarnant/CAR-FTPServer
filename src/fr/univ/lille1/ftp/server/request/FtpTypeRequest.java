@@ -1,9 +1,8 @@
 package fr.univ.lille1.ftp.server.request;
 
-import fr.univ.lille1.ftp.util.FtpConstants;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
+
+import fr.univ.lille1.ftp.util.FtpConstants;
 
 /**
  * Created by Warnant on 09-02-15.
