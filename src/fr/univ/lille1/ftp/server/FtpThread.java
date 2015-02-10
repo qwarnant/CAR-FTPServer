@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import fr.univ.lille1.ftp.server.request.FtpCdupRequest;
-import fr.univ.lille1.ftp.server.request.FtpCwdRequest;
-import fr.univ.lille1.ftp.server.request.FtpPassRequest;
-import fr.univ.lille1.ftp.server.request.FtpPasvRequest;
-import fr.univ.lille1.ftp.server.request.FtpPortRequest;
-import fr.univ.lille1.ftp.server.request.FtpPwdRequest;
 import fr.univ.lille1.ftp.server.request.FtpRequest;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
-import fr.univ.lille1.ftp.server.request.FtpTypeRequest;
-import fr.univ.lille1.ftp.server.request.FtpUserRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpCdupRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpCwdRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpPassRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpPasvRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpPortRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpPwdRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpTypeRequest;
+import fr.univ.lille1.ftp.server.request.control.FtpUserRequest;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpThread extends Thread {
@@ -30,14 +30,15 @@ public class FtpThread extends Thread {
 	private char currentType;
 	private String currentDirectory;
 
-	private Socket socket;
+	private Socket controlSocket;
+
 	private List<FtpRequest> history;
 
 	private DataOutputStream out;
 
 	public FtpThread(Socket socket) throws IOException {
 		super();
-		this.socket = socket;
+		this.controlSocket = socket;
 		this.out = new DataOutputStream(socket.getOutputStream());
 		this.history = new ArrayList<FtpRequest>();
 		this.currentDirectory = FtpServer.getFtpDirectory();
@@ -76,14 +77,17 @@ public class FtpThread extends Thread {
 
 			// Get the input stream
 			InputStreamReader isr = new InputStreamReader(
-					socket.getInputStream());
+					controlSocket.getInputStream());
 			BufferedReader br = new BufferedReader(isr);
 
 			// Read the request type
 			String commandLine = br.readLine();
 			String command = commandLine.substring(0, 4).trim();
-			System.out.println("Receive request : " + command);
 
+			if (FtpConstants.DEBUG_ENABLED) {
+				System.out.println("Receive request : " + command);
+			}
+			
 			if (command.equals(FtpConstants.FTP_CMD_USER)) {
 
 				// Make a USER request
@@ -106,9 +110,6 @@ public class FtpThread extends Thread {
 
 				this.currentRemoteIp = rport.getRemoteIp();
 				this.currentRemotePort = rport.getRemotePort();
-
-				// TODO
-
 			} else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
 
 				// Make a PASV request
@@ -125,30 +126,32 @@ public class FtpThread extends Thread {
 				this.currentType = rtype.getType();
 
 			} else if (command.equals(FtpConstants.FTP_CMD_CWD)) {
-				
+
 				// Make a CWD request
 				FtpCwdRequest rcwd = new FtpCwdRequest(commandLine,
 						this.currentDirectory);
 				this.storeAndExecute(rcwd);
 
 				this.currentDirectory = rcwd.getNewCurrentDirectory();
-				
+
 			} else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
 
 				// Make a PWD request
 				FtpPwdRequest rpwd = new FtpPwdRequest(commandLine,
 						this.currentDirectory);
-				this.storeAndExecute(rpwd);	
-				
+				this.storeAndExecute(rpwd);
+
 			} else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
 
 				// Make a CDUP request
-				FtpCdupRequest rcwd = new FtpCdupRequest(commandLine,
-						"../" + this.currentDirectory);
+				FtpCdupRequest rcwd = new FtpCdupRequest(commandLine, "../"
+						+ this.currentDirectory);
 				this.storeAndExecute(rcwd);
 
 				this.currentDirectory = rcwd.getNewCurrentDirectory();
-				
+
+			} else if (command.equals(FtpConstants.FTP_CMD_NLST)) {
+
 			} else {
 				// Return a FTP response error
 				FtpResponse response = new FtpResponse(
