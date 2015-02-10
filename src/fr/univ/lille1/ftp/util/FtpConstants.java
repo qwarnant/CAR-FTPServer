@@ -9,14 +9,21 @@ public interface FtpConstants {
 	public static final String FTP_CMD_USER = "USER";
 	public static final String FTP_CMD_PASS = "PASS";
     public static final String FTP_CMD_PORT = "PORT";
+    public static final String FTP_CMD_PASV = "PASV";
+    public static final String FTP_CMD_TYPE = "TYPE";
+    public static final String FTP_CMD_NLST = "NLST";
 	public static final String FTP_ANONYMOUS_NAME = "anonymous";
 
 
     public static final int FTP_REP_CMD_OK = 200;
     public static final String FTP_REP_CMD_MSG = "command successful.";
+    public static final String FTP_REP_TYPE_CMD_MSG = "Type set to %s.";
 
     public static final int FTP_REP_READY_CODE = 220;
     public static final String FTP_REP_READY_MSG = "The date and time is ";
+
+    public static final int FTP_REP_PASV_MODE_CODE = 227;
+    public static final String FTP_REP_PASV_MODE_MSG = "Entering Passive Mode (%d,%d,%d,%d,%d,%d)";
 
 	public static final int FTP_REP_LOGIN_OK_CODE = 230;
 	public static final String FTP_REP_LOGIN_OK_MSG = "User logged in, proceed. Logged out if appropriate.";

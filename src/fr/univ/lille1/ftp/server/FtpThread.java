@@ -19,6 +19,7 @@ public class FtpThread extends Thread {
     private String username;
     private String currentRemoteIp;
     private int currentRemotePort;
+    private char currentType;
 
     private Socket socket;
     private List<FtpRequest> history;
@@ -94,6 +95,19 @@ public class FtpThread extends Thread {
 
                 this.currentRemoteIp = rport.getRemoteIp();
                 this.currentRemotePort = rport.getRemotePort();
+            } else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
+
+                // Make a PASV request
+                FtpPasvRequest rpasv = new FtpPasvRequest(commandLine);
+                this.storeAndExecute(rpasv);
+                //TODO
+
+            } else if (command.equals(FtpConstants.FTP_CMD_TYPE)) {
+
+                FtpTypeRequest rtype = new FtpTypeRequest(commandLine);
+                this.storeAndExecute(rtype);
+
+                this.currentType = rtype.getType();
 
             } else {
                 // Return a FTP response error
