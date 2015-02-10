@@ -3,10 +3,11 @@ package fr.univ.lille1.ftp.util;
 public interface FtpConstants {
 
 	public static final boolean DEBUG_ENABLED = true;
+    public static final boolean IS_ANONYMOUS_MODE_ENABLED = true;
+    public static final boolean CAN_ANONYNOUS_WRITE = true;
 
 	public static final String FTP_HOST_NAME = "127.0.0.1";
 	public static final int FTP_SERVER_PORT = 1024;
-	public static final boolean IS_ANONYMOUS_MODE_ENABLED = true;
 
 	public static char FTP_ASCII_TYPE = 'A';
 	public static char FTP_BINARY_TYPE = 'I';
@@ -66,7 +67,8 @@ public interface FtpConstants {
 	public static final int FTP_ERR_DIR_EXISTS_CODE = 521;
 	public static final String FTP_ERR_DIR_EXISTS_MSG = "directory already exists";
 
-	public static final int FTP_ERR_FILE_NO_EXISTS_CODE = 550;
+	public static final int FTP_ERR_ACTION_NOT_TAKEN = 550;
 	public static final String FTP_ERR_FILE_NO_EXISTS_MSG = "No such file or directory.";
+    public static final String FTP_ERR_ACCESS_DENIED_MSG = "Access is denied.";
 
 }

@@ -29,7 +29,7 @@ public class FtpCwdRequest extends FtpRequest {
 		// Check directory exists
 		if (targetDirectory == null || !targetDirectory.exists()
 				&& !targetDirectory.isDirectory()) {
-			return new FtpResponse(FtpConstants.FTP_ERR_FILE_NO_EXISTS_CODE,
+			return new FtpResponse(FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
 					"'" + fullDirectoryPath + "' : "
 							+ FtpConstants.FTP_ERR_FILE_NO_EXISTS_MSG);
 		}

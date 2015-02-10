@@ -34,7 +34,7 @@ public class FtpNlstRequest extends FtpDataRequest {
 		// Check directory exists
 		if (targetDirectory == null || !targetDirectory.exists()
 				&& !targetDirectory.isDirectory()) {
-			return new FtpResponse(FtpConstants.FTP_ERR_FILE_NO_EXISTS_CODE,
+			return new FtpResponse(FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
 					"'" + targetDirectoryPath + "' : "
 							+ FtpConstants.FTP_ERR_FILE_NO_EXISTS_MSG);
 		}

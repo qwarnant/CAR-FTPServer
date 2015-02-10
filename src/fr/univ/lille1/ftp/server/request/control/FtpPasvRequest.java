@@ -12,6 +12,9 @@ import java.io.IOException;
  */
 public class FtpPasvRequest extends FtpRequest {
 
+    private String localIp;
+    private int localPort;
+
     public FtpPasvRequest(String commandLine) {
         super(commandLine);
     }
@@ -21,6 +24,10 @@ public class FtpPasvRequest extends FtpRequest {
 
         // Get a free number port
         int portNumber = FtpPortManager.getInstance().getNewPort();
+
+        this.localIp = FtpConstants.FTP_HOST_NAME;
+        this.localPort = portNumber;
+
         int portNumber1 = portNumber / 256;
         int portNumber2 = portNumber % 256;
 

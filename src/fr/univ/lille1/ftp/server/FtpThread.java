@@ -20,162 +20,178 @@ import fr.univ.lille1.ftp.server.request.control.FtpPortRequest;
 import fr.univ.lille1.ftp.server.request.control.FtpPwdRequest;
 import fr.univ.lille1.ftp.server.request.control.FtpTypeRequest;
 import fr.univ.lille1.ftp.server.request.control.FtpUserRequest;
+import fr.univ.lille1.ftp.server.request.data.FtpNlstRequest;
 import fr.univ.lille1.ftp.util.FtpConstants;
 
 public class FtpThread extends Thread {
 
-	private String currentUsername;
-	private String currentRemoteIp;
-	private int currentRemotePort;
-	private char currentType;
-	private String currentDirectory;
+    private String currentUsername;
+    private String currentRemoteIp;
+    private int currentRemotePort;
+    private char currentType;
+    private String currentDirectory;
+    private String currentLocalIp;
+    private int currentLocalPort;
 
-	private Socket controlSocket;
+    private Socket controlSocket;
 
-	private List<FtpRequest> history;
+    private List<FtpRequest> history;
 
-	private DataOutputStream out;
+    private DataOutputStream controlOutStream;
 
-	public FtpThread(Socket socket) throws IOException {
-		super();
-		this.controlSocket = socket;
-		this.out = new DataOutputStream(socket.getOutputStream());
-		this.history = new ArrayList<FtpRequest>();
-		this.currentDirectory = FtpServer.getFtpDirectory();
-	}
+    public FtpThread(Socket socket) throws IOException {
+        super();
+        this.controlSocket = socket;
+        this.controlOutStream = new DataOutputStream(socket.getOutputStream());
+        this.history = new ArrayList<FtpRequest>();
+        this.currentDirectory = FtpServer.getFtpDirectory();
+        this.currentType = FtpConstants.FTP_BINARY_TYPE;
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		try {
+        try {
 
-			// Make a FTP reponse to say that the server is ready
-			Date now = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			FtpResponse response = new FtpResponse(
-					FtpConstants.FTP_REP_READY_CODE,
-					FtpConstants.FTP_REP_READY_MSG + sdf.format(now));
+            // Make a FTP reponse to say that the server is ready
+            Date now = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            FtpResponse response = new FtpResponse(
+                    FtpConstants.FTP_REP_READY_CODE,
+                    FtpConstants.FTP_REP_READY_MSG + sdf.format(now));
 
-			// Print welcome message
-			out.writeBytes("******************************\n");
-			out.writeBytes("Welcome to my great FTP server\n");
-			out.writeBytes("******************************\n");
-			out.writeBytes(response.toString());
+            // Print welcome message
+            controlOutStream.writeBytes("******************************\n");
+            controlOutStream.writeBytes("Welcome to my great FTP server\n");
+            controlOutStream.writeBytes("******************************\n");
+            controlOutStream.writeBytes(response.toString());
 
-			// Starting to catch all FTP requests ...
-			while (true) {
-				this.handleInputRequest();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            // Starting to catch all FTP requests ...
+            while (true) {
+                this.handleInputRequest();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void handleInputRequest() {
+    public void handleInputRequest() {
 
-		try {
+        try {
 
-			// Get the input stream
-			InputStreamReader isr = new InputStreamReader(
-					controlSocket.getInputStream());
-			BufferedReader br = new BufferedReader(isr);
+            // Get the input stream
+            InputStreamReader isr = new InputStreamReader(
+                    controlSocket.getInputStream());
+            BufferedReader br = new BufferedReader(isr);
 
-			// Read the request type
-			String commandLine = br.readLine();
-			String command = commandLine.substring(0, 4).trim();
+            // Read the request type
+            String commandLine = br.readLine();
+            String command = commandLine.substring(0, 4).trim();
 
-			if (FtpConstants.DEBUG_ENABLED) {
-				System.out.println("Receive request : " + command);
-			}
-			
-			if (command.equals(FtpConstants.FTP_CMD_USER)) {
+            if (FtpConstants.DEBUG_ENABLED) {
+                System.out.println("Receive request : " + command);
+            }
 
-				// Make a USER request
-				FtpUserRequest ruser = new FtpUserRequest(commandLine);
-				this.storeAndExecute(ruser);
-				this.currentUsername = ruser.getResultUsername();
+            if (command.equals(FtpConstants.FTP_CMD_USER)) {
 
-			} else if (command.equals(FtpConstants.FTP_CMD_PASS)) {
+                // Make a USER request
+                FtpUserRequest ruser = new FtpUserRequest(commandLine);
+                this.storeAndExecute(ruser);
+                this.currentUsername = ruser.getResultUsername();
 
-				// Make a PASS request
-				FtpRequest rpass = new FtpPassRequest(commandLine,
-						this.currentUsername);
-				this.storeAndExecute(rpass);
+            } else if (command.equals(FtpConstants.FTP_CMD_PASS)) {
 
-			} else if (command.equals(FtpConstants.FTP_CMD_PORT)) {
+                // Make a PASS request
+                FtpRequest rpass = new FtpPassRequest(commandLine,
+                        this.currentUsername);
+                this.storeAndExecute(rpass);
 
-				// Make a PORT request
-				FtpPortRequest rport = new FtpPortRequest(commandLine);
-				this.storeAndExecute(rport);
+            } else if (command.equals(FtpConstants.FTP_CMD_PORT)) {
 
-				this.currentRemoteIp = rport.getRemoteIp();
-				this.currentRemotePort = rport.getRemotePort();
-			} else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
+                // Make a PORT request
+                FtpPortRequest rport = new FtpPortRequest(commandLine);
+                this.storeAndExecute(rport);
 
-				// Make a PASV request
-				FtpPasvRequest rpasv = new FtpPasvRequest(commandLine);
-				this.storeAndExecute(rpasv);
-				// TODO
+                this.currentRemoteIp = rport.getRemoteIp();
+                this.currentRemotePort = rport.getRemotePort();
+            } else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
 
-			} else if (command.equals(FtpConstants.FTP_CMD_TYPE)) {
+                // Make a PASV request
+                FtpPasvRequest rpasv = new FtpPasvRequest(commandLine);
+                this.storeAndExecute(rpasv);
+                //this.
+                // TODO
 
-				// Make a TYPE request
-				FtpTypeRequest rtype = new FtpTypeRequest(commandLine);
-				this.storeAndExecute(rtype);
+            } else if (command.equals(FtpConstants.FTP_CMD_TYPE)) {
 
-				this.currentType = rtype.getType();
+                // Make a TYPE request
+                FtpTypeRequest rtype = new FtpTypeRequest(commandLine);
+                this.storeAndExecute(rtype);
 
-			} else if (command.equals(FtpConstants.FTP_CMD_CWD)) {
+                this.currentType = rtype.getType();
 
-				// Make a CWD request
-				FtpCwdRequest rcwd = new FtpCwdRequest(commandLine,
-						this.currentDirectory);
-				this.storeAndExecute(rcwd);
+            } else if (command.equals(FtpConstants.FTP_CMD_CWD)) {
 
-				this.currentDirectory = rcwd.getNewCurrentDirectory();
+                // Make a CWD request
+                FtpCwdRequest rcwd = new FtpCwdRequest(commandLine,
+                        this.currentDirectory);
+                this.storeAndExecute(rcwd);
 
-			} else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
+                this.currentDirectory = rcwd.getNewCurrentDirectory();
 
-				// Make a PWD request
-				FtpPwdRequest rpwd = new FtpPwdRequest(commandLine,
-						this.currentDirectory);
-				this.storeAndExecute(rpwd);
+            } else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
 
-			} else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
+                // Make a PWD request
+                FtpPwdRequest rpwd = new FtpPwdRequest(commandLine,
+                        this.currentDirectory);
+                this.storeAndExecute(rpwd);
 
-				// Make a CDUP request
-				FtpCdupRequest rcwd = new FtpCdupRequest(commandLine, "../"
-						+ this.currentDirectory);
-				this.storeAndExecute(rcwd);
+            } else if (command.equals(FtpConstants.FTP_CMD_PWD)) {
 
-				this.currentDirectory = rcwd.getNewCurrentDirectory();
+                // Make a CDUP request
+                FtpCdupRequest rcwd = new FtpCdupRequest(commandLine, "../"
+                        + this.currentDirectory);
+                this.storeAndExecute(rcwd);
 
-			} else if (command.equals(FtpConstants.FTP_CMD_NLST)) {
+                this.currentDirectory = rcwd.getNewCurrentDirectory();
 
-			} else {
-				// Return a FTP response error
-				FtpResponse response = new FtpResponse(
-						FtpConstants.FTP_ERR_INVALID_COMMAND_CODE,
-						FtpConstants.FTP_ERR_INVALID_COMMAND_MSG);
-				out.writeBytes(response.toString());
-			}
+            } else if (command.equals(FtpConstants.FTP_CMD_NLST)) {
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+                // Make a NLST request
+                FtpNlstRequest rnlst = new FtpNlstRequest(
+                        commandLine,
+                        this.currentType,
+                        this.currentRemoteIp,
+                        this.currentRemotePort
+                );
+                FtpResponse prepareResponse = rnlst.prepare();
+                this.controlOutStream.writeBytes(prepareResponse.toString());
 
-	public void storeAndExecute(FtpRequest request) throws IOException {
-		history.add(request);
+                this.storeAndExecute(rnlst);
+            } else {
+                // Return a FTP response error
+                FtpResponse response = new FtpResponse(
+                        FtpConstants.FTP_ERR_INVALID_COMMAND_CODE,
+                        FtpConstants.FTP_ERR_INVALID_COMMAND_MSG);
+                controlOutStream.writeBytes(response.toString());
+            }
 
-		FtpResponse response = request.process();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		if (FtpConstants.DEBUG_ENABLED) {
-			System.out.println(request);
-			System.out.println(response);
-		}
+    public void storeAndExecute(FtpRequest request) throws IOException {
+        history.add(request);
 
-		// Write the answer to the socket
-		out.writeBytes(response.toString());
-	}
+        FtpResponse response = request.process();
+
+        if (FtpConstants.DEBUG_ENABLED) {
+            System.out.println(request);
+            System.out.println(response);
+        }
+
+        // Write the answer to the socket
+        controlOutStream.writeBytes(response.toString());
+    }
 }

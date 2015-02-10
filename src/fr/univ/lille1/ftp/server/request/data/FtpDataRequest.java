@@ -1,5 +1,6 @@
 package fr.univ.lille1.ftp.server.request.data;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
@@ -12,6 +13,8 @@ public abstract class FtpDataRequest extends FtpRequest {
 	protected int remotePort;
 	protected char currentType;
 	protected Socket dataSocket;
+
+    protected DataInputStream in;
 	protected DataOutputStream out;
 
 	public FtpDataRequest(String commandLine, char currentType,
