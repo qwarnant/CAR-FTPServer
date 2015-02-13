@@ -1,29 +1,27 @@
 package fr.univ.lille1.ftp.server.request.data;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpUtils;
-
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Created by Warnant on 10-02-15.
  */
 public class FtpRetrRequest extends FtpDataRequest {
 
-    private String username;
     private String currentDirectory;
 
-    public FtpRetrRequest(String commandLine, String currentDirectory, String username, char currentType,
+    public FtpRetrRequest(String commandLine, String currentDirectory,char currentType,
                           String remoteIp, int remotePort) {
         super(commandLine, currentType, remoteIp, remotePort);
 
-        this.username = username;
         this.currentDirectory = currentDirectory;
     }
 
@@ -39,10 +37,11 @@ public class FtpRetrRequest extends FtpDataRequest {
                     FtpConstants.FTP_ERR_SYNTAX_MSG
             );
         }
+        
 
         // Copy the file into the output stream
         File targetFile = new File(this.currentDirectory + targetFilePath);
-        Files.copy(targetFile.toPath(), this.dataSocket.getOutputStream());
+        FtpUtils.copyStream(new FileInputStream(targetFile), this.dataSocket.getOutputStream());
 
         // Close the data socket
         this.dataSocket.close();
@@ -50,6 +49,7 @@ public class FtpRetrRequest extends FtpDataRequest {
         return new FtpResponse(FtpConstants.FTP_REP_TRANSF_COMPL_CODE,
                 FtpConstants.FTP_REP_TRANSF_COMPL_MSG);
     }
+   
 
     @Override
     public FtpResponse prepare() {

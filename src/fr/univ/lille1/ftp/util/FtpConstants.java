@@ -18,6 +18,7 @@ public interface FtpConstants {
 	public static final String FTP_CMD_PASV = "PASV";
 	public static final String FTP_CMD_TYPE = "TYPE";
 	public static final String FTP_CMD_NLST = "NLST";
+	public static final String FTP_CMD_LIST = "LIST";
 	public static final String FTP_CMD_CWD = "CWD";
 	public static final String FTP_CMD_PWD = "PWD";
 	public static final String FTP_CMD_CDUP = "CDUP";

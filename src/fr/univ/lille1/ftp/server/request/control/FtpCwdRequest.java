@@ -21,9 +21,9 @@ public class FtpCwdRequest extends FtpRequest {
 	public FtpResponse process() throws IOException {
 
 		// Get the target directory
-		String targetDirectoryPath = this.commandLine.substring(5,
-				commandLine.length());
-		String fullDirectoryPath = this.currentDirectory + targetDirectoryPath;
+		String targetDirectoryPath = (this.commandLine.length() > 4) ? this.commandLine.substring(4,
+				commandLine.length()) : "";
+		String fullDirectoryPath = this.currentDirectory + "/" + targetDirectoryPath;
 
 		File targetDirectory = new File(fullDirectoryPath);
 		// Check directory exists

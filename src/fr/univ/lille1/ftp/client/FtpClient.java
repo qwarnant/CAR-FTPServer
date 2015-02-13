@@ -56,7 +56,7 @@ public class FtpClient {
 					InetAddress.getByName(FtpConstants.FTP_HOST_NAME),
 					FtpConstants.FTP_SERVER_PORT);
 			client.connect(sa);
-			//client.dummyRead();
+			client.dummyRead();
 			client.doUserRequest();
 
 		} catch (UnknownHostException e) {

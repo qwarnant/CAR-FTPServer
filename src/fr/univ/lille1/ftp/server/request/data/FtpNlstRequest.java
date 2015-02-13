@@ -14,6 +14,8 @@ import fr.univ.lille1.ftp.util.FtpUtils;
  * Created by Warnant on 06-02-15.
  */
 public class FtpNlstRequest extends FtpDataRequest {
+	
+	private String targetDirectoryPath;
 
 	public FtpNlstRequest(String commandLine, char currentType,
 			String remoteIp, int remotePort) {
@@ -22,13 +24,6 @@ public class FtpNlstRequest extends FtpDataRequest {
 
 	@Override
 	public FtpResponse process() throws IOException {
-		String targetDirectoryPath = this.commandLine.substring(5,
-				commandLine.length());
-
-		// If there is now argument directory, get the default
-		if (targetDirectoryPath.length() == 0) {
-			targetDirectoryPath = FtpServer.getFtpDirectory();
-		}
 
 		File targetDirectory = new File(targetDirectoryPath);
 		// Check directory exists
@@ -41,6 +36,9 @@ public class FtpNlstRequest extends FtpDataRequest {
 
 		// Write the file list on the socket
 		String fileList = FtpUtils.listFilesInFolder(targetDirectory);
+		if(FtpConstants.DEBUG_ENABLED) {
+			System.out.println(fileList);
+		}
 		this.out.writeBytes(fileList);
 
 		// Close the data socket
@@ -55,15 +53,14 @@ public class FtpNlstRequest extends FtpDataRequest {
 	public FtpResponse prepare() {
 		try {
 			this.dataSocket = new Socket(remoteIp, remotePort);
-			
-			// TODO handle the TYPE format
-			
+						
 			this.out = new DataOutputStream(dataSocket.getOutputStream());
+			this.targetDirectoryPath = (this.commandLine.length() > 5) ? this.commandLine.substring(5, commandLine.length()) : FtpServer.getFtpDirectory();
 
 			String responseString = String.format(
 					FtpConstants.FTP_REP_DATA_OK_MSG,
 					FtpUtils.getTransferTypeString(currentType),
-					this.commandLine.substring(5, commandLine.length()));
+					this.targetDirectoryPath);
 
 			return new FtpResponse(FtpConstants.FTP_REP_DATA_OK_CODE,
 					responseString);

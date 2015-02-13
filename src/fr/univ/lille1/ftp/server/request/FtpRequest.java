@@ -11,4 +11,9 @@ public abstract class FtpRequest {
 	}
 
 	public abstract FtpResponse process() throws IOException;
+	
+	@Override
+	public String toString() {
+		return this.commandLine;
+	}
 }

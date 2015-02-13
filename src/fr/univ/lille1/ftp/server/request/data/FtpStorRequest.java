@@ -1,16 +1,13 @@
 package fr.univ.lille1.ftp.server.request.data;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpUtils;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Created by Warnant on 10-02-15.
@@ -52,7 +49,7 @@ public class FtpStorRequest extends FtpDataRequest {
 
         // Copy the input stream into the new file
         File targetFile = new File(this.currentDirectory + targetFilePath);
-        Files.copy(this.dataSocket.getInputStream(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        FtpUtils.copyStream(this.dataSocket.getInputStream(), new FileOutputStream(targetFile));
 
         // Close the data socket
         this.dataSocket.close();
