@@ -18,7 +18,7 @@ public class FtpPwdRequest extends FtpRequest {
 	@Override
 	public FtpResponse process() throws IOException {
 		return new FtpResponse(FtpConstants.FTP_REP_PWD_CODE,
-				this.currentDirectory + " " + FtpConstants.FTP_REP_PWD_CODE);
+				"\"" + this.currentDirectory + "\"");
 	}
 
 }

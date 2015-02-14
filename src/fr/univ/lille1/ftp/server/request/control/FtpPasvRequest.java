@@ -46,4 +46,12 @@ public class FtpPasvRequest extends FtpRequest {
 
         return new FtpResponse(FtpConstants.FTP_REP_PASV_MODE_CODE, PasvFormat);
     }
+
+    public String getLocalIp() {
+        return this.localIp;
+    }
+
+    public int getLocalPort() {
+        return this.localPort;
+    }
 }

@@ -2,6 +2,7 @@ package fr.univ.lille1.ftp.server.request.data;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import fr.univ.lille1.ftp.server.request.FtpRequest;
@@ -9,20 +10,20 @@ import fr.univ.lille1.ftp.server.request.FtpResponse;
 
 public abstract class FtpDataRequest extends FtpRequest {
 
-	protected String remoteIp;
-	protected int remotePort;
+	protected Socket socket;
 	protected char currentType;
 	protected Socket dataSocket;
+    protected String currentDirectory;
 
     protected DataInputStream in;
 	protected DataOutputStream out;
 
-	public FtpDataRequest(String commandLine, char currentType,
-			String remoteIp, int remotePort) {
+	public FtpDataRequest(String commandLine, String currentDirectory, char currentType,
+			Socket socket) {
 		super(commandLine);
-		this.remoteIp = remoteIp;
-		this.remotePort = remotePort;
+		this.socket = socket;
 		this.currentType = currentType;
+        this.currentDirectory = currentDirectory;
 	}
 
 	public abstract FtpResponse prepare();

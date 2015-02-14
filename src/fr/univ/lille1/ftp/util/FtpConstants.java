@@ -21,7 +21,11 @@ public interface FtpConstants {
 	public static final String FTP_CMD_LIST = "LIST";
 	public static final String FTP_CMD_CWD = "CWD";
 	public static final String FTP_CMD_PWD = "PWD";
+    public static final String FTP_CMD_XPWD = "XPWD";
 	public static final String FTP_CMD_CDUP = "CDUP";
+    public static final String FTP_CMD_MKD = "MKD";
+    public static final String FTP_CMD_RMD = "RMD";
+    public static final String FTP_CMD_QUIT = "QUIT";
 
 	public static final String FTP_ANONYMOUS_NAME = "anonymous";
 
@@ -34,6 +38,9 @@ public interface FtpConstants {
 
 	public static final int FTP_REP_READY_CODE = 220;
 	public static final String FTP_REP_READY_MSG = "The date and time is ";
+
+    public static final int FTP_REP_QUIT_CODE = 221;
+    public static final String FTP_REP_QUIT_MSG = "Goodbye.";
 
 	public static final int FTP_REP_TRANSF_COMPL_CODE = 226;
 	public static final String FTP_REP_TRANSF_COMPL_MSG = "Transfer complete.";

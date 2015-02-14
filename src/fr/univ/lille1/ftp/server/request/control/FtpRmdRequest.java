@@ -7,10 +7,15 @@ import fr.univ.lille1.ftp.server.request.FtpResponse;
 
 public class FtpRmdRequest extends FtpRequest {
 
-	public FtpRmdRequest(String commandLine) {
-		super(commandLine);
-		// TODO Auto-generated constructor stub
-	}
+    private String username;
+    private String currentDirectory;
+
+    public FtpRmdRequest(String commandLine, String currentDirectory, String username) {
+        super(commandLine);
+        this.username = username;
+        this.currentDirectory = currentDirectory;
+    }
+
 
 	@Override
 	public FtpResponse process() throws IOException {

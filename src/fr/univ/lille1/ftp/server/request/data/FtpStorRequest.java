@@ -15,14 +15,12 @@ import fr.univ.lille1.ftp.util.FtpUtils;
 public class FtpStorRequest extends FtpDataRequest {
 
     private String username;
-    private String currentDirectory;
 
     public FtpStorRequest(String commandLine, String currentDirectory, String username, char currentType,
-                          String remoteIp, int remotePort) {
-        super(commandLine, currentType, remoteIp, remotePort);
+                          Socket socket) {
+        super(commandLine, currentDirectory, currentType, socket);
 
         this.username = username;
-        this.currentDirectory = currentDirectory;
     }
 
     @Override
@@ -61,8 +59,6 @@ public class FtpStorRequest extends FtpDataRequest {
     @Override
     public FtpResponse prepare() {
         try {
-            this.dataSocket = new Socket(remoteIp, remotePort);
-
             String responseString = String.format(
                     FtpConstants.FTP_REP_DATA_OK_MSG,
                     FtpUtils.getTransferTypeString(currentType),

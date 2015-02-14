@@ -16,13 +16,9 @@ import fr.univ.lille1.ftp.util.FtpUtils;
  */
 public class FtpRetrRequest extends FtpDataRequest {
 
-    private String currentDirectory;
-
     public FtpRetrRequest(String commandLine, String currentDirectory,char currentType,
-                          String remoteIp, int remotePort) {
-        super(commandLine, currentType, remoteIp, remotePort);
-
-        this.currentDirectory = currentDirectory;
+                          Socket socket) {
+        super(commandLine, currentDirectory, currentType, socket );
     }
 
     @Override
@@ -54,8 +50,6 @@ public class FtpRetrRequest extends FtpDataRequest {
     @Override
     public FtpResponse prepare() {
         try {
-            this.dataSocket = new Socket(remoteIp, remotePort);
-
             String responseString = String.format(
                     FtpConstants.FTP_REP_DATA_OK_MSG,
                     FtpUtils.getTransferTypeString(currentType),

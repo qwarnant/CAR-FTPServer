@@ -6,33 +6,43 @@ import java.io.IOException;
 import fr.univ.lille1.ftp.server.request.FtpRequest;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
+import fr.univ.lille1.ftp.util.FtpPath;
 
 public class FtpMkdRequest extends FtpRequest {
 
-	public FtpMkdRequest(String commandLine) {
+    private String username;
+    private String currentDirectory;
+
+	public FtpMkdRequest(String commandLine, String currentDirectory, String username) {
 		super(commandLine);
-		// TODO Auto-generated constructor stub
+        this.username = username;
+        this.currentDirectory = currentDirectory;
 	}
 
 	@Override
 	public FtpResponse process() throws IOException {
+        // Anonymous have no write access ?
+        if (!FtpConstants.CAN_ANONYNOUS_WRITE &&
+                this.username.equals(FtpConstants.FTP_ANONYMOUS_NAME)) {
+            return new FtpResponse(
+                    FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
+                    FtpConstants.FTP_ERR_ACCESS_DENIED_MSG
+            );
+        }
+
 		// Get the target directory
-		String targetDirectoryPath = this.commandLine.substring(5,
-				commandLine.length());
-		
-		String fullDirectoryPath = null;
+		FtpPath targetDirectoryPath = new FtpPath(this.commandLine, this.currentDirectory, true);
 		
 
-		File targetDirectory = new File(fullDirectoryPath);
+		File targetDirectory = new File(targetDirectoryPath.getPath());
 		// Check directory exists
 		if (targetDirectory == null || targetDirectory.exists()) {
 			return new FtpResponse(FtpConstants.FTP_ERR_DIR_EXISTS_CODE,
-					"'" + fullDirectoryPath + "' "
+					"'" + targetDirectoryPath + "' "
 							+ FtpConstants.FTP_ERR_DIR_EXISTS_MSG);
 		}
 
-		// TODO Auto-generated method stub
-		
+        targetDirectory.mkdir();
 			
 		return new FtpResponse(FtpConstants.FTP_REP_PWD_CODE,
 				targetDirectoryPath + " " + FtpConstants.FTP_REP_MKD_MSG);
