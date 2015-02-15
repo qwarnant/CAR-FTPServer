@@ -11,6 +11,13 @@ import java.net.*;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * TestUserPass is the unit test class which tests all the
+ * USER and PASS use cases on the ftp server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public class TestUserPass {
 
     private static SocketAddress sa;
