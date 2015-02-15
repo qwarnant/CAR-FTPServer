@@ -31,7 +31,7 @@ public class FtpPasvRequest extends FtpRequest {
         int portNumber1 = portNumber / 256;
         int portNumber2 = portNumber % 256;
 
-        String[] localIp = FtpConstants.FTP_HOST_NAME.split(".");
+        String[] localIp = FtpConstants.FTP_HOST_NAME.split("\\.");
 
         // Parse the pasv data response
         String PasvFormat = String.format(

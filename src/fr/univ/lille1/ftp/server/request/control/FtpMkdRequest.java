@@ -7,6 +7,7 @@ import fr.univ.lille1.ftp.server.request.FtpRequest;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpPath;
+import fr.univ.lille1.ftp.util.FtpUtils;
 
 public class FtpMkdRequest extends FtpRequest {
 
@@ -31,8 +32,7 @@ public class FtpMkdRequest extends FtpRequest {
         }
 
 		// Get the target directory
-		FtpPath targetDirectoryPath = new FtpPath(this.commandLine, this.currentDirectory, true);
-		
+		FtpPath targetDirectoryPath =FtpUtils.extractArgumentFromCommandLine(this.commandLine, this.currentDirectory);
 
 		File targetDirectory = new File(targetDirectoryPath.getPath());
 		// Check directory exists

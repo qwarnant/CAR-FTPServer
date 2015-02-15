@@ -24,7 +24,9 @@ public interface FtpConstants {
     public static final String FTP_CMD_XPWD = "XPWD";
 	public static final String FTP_CMD_CDUP = "CDUP";
     public static final String FTP_CMD_MKD = "MKD";
+    public static final String FTP_CMD_XMKD = "XMKD";
     public static final String FTP_CMD_RMD = "RMD";
+    public static final String FTP_CMD_XRMD = "XRMD";
     public static final String FTP_CMD_QUIT = "QUIT";
 
 	public static final String FTP_ANONYMOUS_NAME = "anonymous";
@@ -52,9 +54,10 @@ public interface FtpConstants {
 	public static final String FTP_REP_LOGIN_OK_MSG = "User logged in, proceed. Logged out if appropriate.";
 	public static final String FTP_REP_ANONYM_LOGIN_OK_MSG = "Guest login ok, access restrictions apply.";
 
-	public static final int FTP_REP_PWD_CODE = 257;
+	public static final int FTP_REP_PWD_CODE = 250;
 	public static final String FTP_REP_PWD_MSG = "is the current directory.";
 	public static final String FTP_REP_MKD_MSG = "directory created.";
+    public static final String FTP_REP_RMD_MSG = "directory removed.";
 
 	public static final int FTP_REP_NEED_USER_CODE = 331;
 	public static final String FTP_REP_NEED_USER_MSG = "User name okay, need password.";

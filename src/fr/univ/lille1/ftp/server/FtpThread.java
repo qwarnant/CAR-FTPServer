@@ -116,6 +116,11 @@ public class FtpThread extends Thread {
 				this.storeAndExecute(rport);
 
 				this.dataSocket = new Socket(rport.getRemoteIp(), rport.getRemotePort());
+
+                if(FtpConstants.DEBUG_ENABLED) {
+                    System.out.println("Remote data connection on : " + this.dataSocket.getRemoteSocketAddress());
+                }
+
 			} else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
 
 				// Make a PASV request
@@ -165,18 +170,19 @@ public class FtpThread extends Thread {
                         this.currentDirectory,
                         this.currentType,
                         this.dataSocket);
+
                 FtpResponse prepareResponse = rnlst.prepare();
                 this.controlOutStream.writeBytes(prepareResponse.toString());
 
                 this.storeAndExecute(rnlst);
 
-            } else if(command.equals(FtpConstants.FTP_CMD_MKD)){
+            } else if(command.equals(FtpConstants.FTP_CMD_MKD) || command.equals(FtpConstants.FTP_CMD_XMKD)){
 
                 // Make a MKD request
                 FtpMkdRequest rmkd = new FtpMkdRequest(commandLine, this.currentDirectory, this.currentUsername);
                 this.storeAndExecute(rmkd);
 
-            } else if(command.equals(FtpConstants.FTP_CMD_RMD)){
+            } else if(command.equals(FtpConstants.FTP_CMD_RMD) || command.equals(FtpConstants.FTP_CMD_XRMD)){
 
                 // Make a RMD request
                 FtpRmdRequest rmkd = new FtpRmdRequest(commandLine, this.currentDirectory, this.currentUsername);

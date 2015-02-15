@@ -78,6 +78,32 @@ public class FtpUtils {
         return folderFiles;
     }
 
+
+    public static int deleteFilesInFolder(final File folder) {
+
+        int deleteCount = 0;
+
+        if (folder == null || folder.listFiles() == null) {
+            return deleteCount;
+        }
+
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                   deleteCount += deleteFilesInFolder(fileEntry);
+            }
+            if(fileEntry.delete()) {
+                deleteCount++;
+            }
+
+        }
+
+        if(folder.delete()) {
+            deleteCount++;
+        }
+
+        return deleteCount;
+    }
+
     public static void copyStream(InputStream is, OutputStream os) {
         final int buffer_size = 1024;
         try {

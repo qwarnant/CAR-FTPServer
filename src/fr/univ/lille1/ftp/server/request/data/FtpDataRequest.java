@@ -10,7 +10,6 @@ import fr.univ.lille1.ftp.server.request.FtpResponse;
 
 public abstract class FtpDataRequest extends FtpRequest {
 
-	protected Socket socket;
 	protected char currentType;
 	protected Socket dataSocket;
     protected String currentDirectory;
@@ -21,7 +20,7 @@ public abstract class FtpDataRequest extends FtpRequest {
 	public FtpDataRequest(String commandLine, String currentDirectory, char currentType,
 			Socket socket) {
 		super(commandLine);
-		this.socket = socket;
+		this.dataSocket = socket;
 		this.currentType = currentType;
         this.currentDirectory = currentDirectory;
 	}
