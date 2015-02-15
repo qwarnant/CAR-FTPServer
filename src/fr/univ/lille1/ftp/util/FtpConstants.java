@@ -6,6 +6,9 @@ public interface FtpConstants {
     public static final boolean IS_ANONYMOUS_MODE_ENABLED = true;
     public static final boolean CAN_ANONYNOUS_WRITE = true;
 
+    public static final String FTP_TEST_USERNAME = "johndoe";
+    public static final String FTP_TEST_PASSWORD = "foo";
+
 	public static final String FTP_HOST_NAME = "127.0.0.1";
 	public static final int FTP_SERVER_PORT = 1024;
 

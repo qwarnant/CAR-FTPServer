@@ -33,6 +33,7 @@ public class FtpThread extends Thread {
 
     private Socket dataSocket;
     private DataOutputStream dataOutStream;
+    private int dataPort;
 
     private List<FtpRequest> history;
 
@@ -53,6 +54,9 @@ public class FtpThread extends Thread {
 	public void run() {
 
 		try {
+            if(FtpConstants.DEBUG_ENABLED) {
+                System.out.println("Starting the FTP Thread #" + this.id);
+            }
 
 			// Make a FTP reponse to say that the server is ready
 			Date now = new Date();
@@ -69,14 +73,16 @@ public class FtpThread extends Thread {
 				this.handleInputRequest();
 			}
 
+		} catch (IOException e) {
+            if(FtpConstants.DEBUG_ENABLED) {
+                System.out.println("Client disconnected");
+            }
+		} finally {
             if(FtpConstants.DEBUG_ENABLED) {
                 System.out.println("End of the FTP Thread #" + this.id);
             }
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        }
+    }
 
 	public void handleInputRequest() {
 
@@ -128,6 +134,7 @@ public class FtpThread extends Thread {
 				this.storeAndExecute(rpasv);
 
                 ServerSocket socket = new ServerSocket(rpasv.getLocalPort());
+                this.dataPort = rpasv.getLocalPort();
                 this.dataSocket = socket.accept();
 
 			} else if (command.equals(FtpConstants.FTP_CMD_TYPE)) {
@@ -203,7 +210,9 @@ public class FtpThread extends Thread {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+            // Client disconnect : end of the thread and free the data port if needed
+            this.running = false;
+            FtpPortManager.getInstance().freePort(this.dataPort);
 		}
 	}
 
