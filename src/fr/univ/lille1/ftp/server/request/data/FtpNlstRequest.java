@@ -11,7 +11,12 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Created by Warnant on 06-02-15.
+ * FtpNlstRequest is the ftp request that allows the user
+ * to list a directory on the ftp server
+ * Similar to LIST request
+ *
+ * @author Quentin Warnant
+ * @version 1.0
  */
 public class FtpNlstRequest extends FtpDataRequest {
 

@@ -8,13 +8,24 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 import java.io.IOException;
 
 /**
- * Created by Warnant on 09-02-15.
+ * FtpPasvRequest is the class associated to the PASV ftp request
+ * PASV allows the user client to put the connection into passive mode
+ * In the passive mode, the client initiates the data connection to the
+ * server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
  */
 public class FtpPasvRequest extends FtpRequest {
 
     private String localIp;
     private int localPort;
 
+    /**
+     * Class constructor
+     *
+     * @param commandLine String the request client command line
+     */
     public FtpPasvRequest(String commandLine) {
         super(commandLine);
     }
@@ -47,10 +58,20 @@ public class FtpPasvRequest extends FtpRequest {
         return new FtpResponse(FtpConstants.FTP_REP_PASV_MODE_CODE, PasvFormat);
     }
 
+    /**
+     * This method returns the current local IP address used for the data connection
+     *
+     * @return String the local IP address
+     */
     public String getLocalIp() {
         return this.localIp;
     }
 
+    /**
+     * This method returns the current local port number used for the data connection
+     *
+     * @return int the local port number
+     */
     public int getLocalPort() {
         return this.localPort;
     }

@@ -7,10 +7,23 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 
 import java.io.IOException;
 
+/**
+ * FtpUserRequest is the class associated to the USER ftp request
+ * USER allows the user to identify himself on the ftp server with
+ * a username
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public class FtpUserRequest extends FtpRequest {
 
     private String username;
 
+    /**
+     * Class constructor
+     *
+     * @param commandLine String the request client command line
+     */
     public FtpUserRequest(String commandLine) {
         super(commandLine);
     }
@@ -22,8 +35,8 @@ public class FtpUserRequest extends FtpRequest {
 
         if (!FtpUserManager.getInstance().containsUser(username)) {
             return new FtpResponse(
-                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_CODE,
-                    FtpConstants.FTP_ERROR_INVALID_USER_PWD_MSG);
+                    FtpConstants.FTP_ERR_INVALID_USER_PWD_CODE,
+                    FtpConstants.FTP_ERR_INVALID_USER_PWD_MSG);
         }
 
         this.username = username;
@@ -40,6 +53,12 @@ public class FtpUserRequest extends FtpRequest {
 
     }
 
+    /**
+     * This method returns the new current username for the current
+     * ftp thread
+     *
+     * @return String the username for the current thread
+     */
     public String getResultUsername() {
         return this.username;
     }

@@ -12,7 +12,11 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpUtils;
 
 /**
- * Created by Warnant on 10-02-15.
+ * FtpRetrRequest is the ftp request that allows the user
+ * to get a file from the server to the local space of the client
+ *
+ * @author Quentin Warnant
+ * @version 1.0
  */
 public class FtpRetrRequest extends FtpDataRequest {
 

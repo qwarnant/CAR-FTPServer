@@ -9,11 +9,24 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpPath;
 import fr.univ.lille1.ftp.util.FtpUtils;
 
+/**
+ * FtpRmdRequest is the class associated to the (X)RMD ftp request
+ * (X)RMD allows the user to delete a directory on the ftp server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public class FtpRmdRequest extends FtpRequest {
 
     private String username;
     private String currentDirectory;
 
+    /**
+     * Class constructor
+     * @param commandLine String the request client command line
+     * @param currentDirectory String the user current directory on the ftp server
+     * @param username String the current username
+     */
     public FtpRmdRequest(String commandLine, String currentDirectory, String username) {
         super(commandLine);
         this.username = username;

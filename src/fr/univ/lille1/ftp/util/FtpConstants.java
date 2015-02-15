@@ -1,20 +1,39 @@
 package fr.univ.lille1.ftp.util;
 
+/**
+ * FtpConstants is an interface which contains all usefull constants
+ * for the FTP server and the test classes
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public interface FtpConstants {
 
+    /**
+     * General FTP server constants
+     */
 	public static final boolean DEBUG_ENABLED = true;
     public static final boolean IS_ANONYMOUS_MODE_ENABLED = true;
     public static final boolean CAN_ANONYNOUS_WRITE = true;
+    public static final String FTP_HOST_NAME = "127.0.0.1";
+    public static final int FTP_SERVER_PORT = 1024;
 
+    /**
+     * Test account information constants
+     */
     public static final String FTP_TEST_USERNAME = "johndoe";
     public static final String FTP_TEST_PASSWORD = "foo";
+    public static final String FTP_ANONYMOUS_NAME = "anonymous";
 
-	public static final String FTP_HOST_NAME = "127.0.0.1";
-	public static final int FTP_SERVER_PORT = 1024;
-
+    /**
+     * Data transfer type constants
+     */
 	public static char FTP_ASCII_TYPE = 'A';
 	public static char FTP_BINARY_TYPE = 'I';
-	
+
+    /**
+     * All available ftp request constants on the server
+     */
 	public static final String FTP_CMD_USER = "USER";
 	public static final String FTP_CMD_PASS = "PASS";
 	public static final String FTP_CMD_PORT = "PORT";
@@ -30,10 +49,13 @@ public interface FtpConstants {
     public static final String FTP_CMD_XMKD = "XMKD";
     public static final String FTP_CMD_RMD = "RMD";
     public static final String FTP_CMD_XRMD = "XRMD";
+    public static final String FTP_CMD_RETR = "RETR";
+    public static final String FTP_CMD_STOR = "STOR";
     public static final String FTP_CMD_QUIT = "QUIT";
 
-	public static final String FTP_ANONYMOUS_NAME = "anonymous";
-
+    /**
+     * FTP request/response message and code constants
+     */
 	public static final int FTP_REP_DATA_OK_CODE = 150;
 	public static final String FTP_REP_DATA_OK_MSG = "Opening %s mode data connection for %s.";
 
@@ -69,11 +91,14 @@ public interface FtpConstants {
 	public static final int FTP_ERR_CONNECTION_FAILED_CODE = 425;
 	public static final String FTP_ERR_CONNECTION_FAILED_MSG = "Can't open data connection.";
 
-	public static final int FTP_ERROR_INVALID_USER_PWD_CODE = 430;
-	public static final String FTP_ERROR_INVALID_USER_PWD_MSG = "Invalid username or password";
+	public static final int FTP_ERR_INVALID_USER_PWD_CODE = 430;
+	public static final String FTP_ERR_INVALID_USER_PWD_MSG = "Invalid username or password";
 
 	public static final int FTP_ERR_SYNTAX_CODE = 501;
 	public static final String FTP_ERR_SYNTAX_MSG = "Syntax error on the parameters or arguments.";
+
+    public static final int FTP_ERR_BAD_SEQ_CODE = 503;
+    public static final String FTP_ERR_BAD_SEQ_MSG = "Bad sequence of commands.";
 
 	public static final int FTP_ERR_INVALID_COMMAND_CODE = 502;
 	public static final String FTP_ERR_INVALID_COMMAND_MSG = "Command not implemented.";

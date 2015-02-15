@@ -4,8 +4,21 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * FtpUtils is an utility class which contains all utility
+ * methods for the FTP server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public class FtpUtils {
 
+    /**
+     * This method returns the data transfer type string associated to the char type
+     *
+     * @param transferType char the data character type
+     * @return String the data transfer type string
+     */
     public static String getTransferTypeString(char transferType) {
         if (transferType == FtpConstants.FTP_ASCII_TYPE) {
             return "ASCII";
@@ -16,6 +29,13 @@ public class FtpUtils {
         return "unknown";
     }
 
+    /**
+     * This method returns the ftp path object associated to the incoming command line from the client
+     *
+     * @param commandLine      String the requested command line from the ftp client
+     * @param currentDirectory String the current ftp server directory
+     * @return FtpPath the ftp path object
+     */
     public static FtpPath extractArgumentFromCommandLine(String commandLine, String currentDirectory) {
 
         String[] tokens = commandLine.split(" ");
@@ -27,6 +47,12 @@ public class FtpUtils {
         }
     }
 
+    /**
+     * This method returns the request path without any redundancy ".." or "." in the local path
+     *
+     * @param currentPath String the requested path
+     * @return String the new refactored local path
+     */
     public static String refactorPath(String currentPath) {
         if (currentPath == null) return "";
         String[] paths = currentPath.split("\\\\");
@@ -57,6 +83,13 @@ public class FtpUtils {
         return resultPath;
     }
 
+    /**
+     * This method returns the file sub-list of the current folder file
+     *
+     * @param folder    File the current folder
+     * @param recursive boolean true if the search must be recursive, false otherwise
+     * @return String the file sub-list
+     */
     public static String listFilesInFolder(final File folder, boolean recursive) {
         String folderFiles = "";
 
@@ -78,7 +111,12 @@ public class FtpUtils {
         return folderFiles;
     }
 
-
+    /**
+     * This method deletes recursively all the sub-files of the requested directory
+     *
+     * @param folder File the requested folder
+     * @return int the deleted file count
+     */
     public static int deleteFilesInFolder(final File folder) {
 
         int deleteCount = 0;
@@ -89,21 +127,27 @@ public class FtpUtils {
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
-                   deleteCount += deleteFilesInFolder(fileEntry);
+                deleteCount += deleteFilesInFolder(fileEntry);
             }
-            if(fileEntry.delete()) {
+            if (fileEntry.delete()) {
                 deleteCount++;
             }
 
         }
 
-        if(folder.delete()) {
+        if (folder.delete()) {
             deleteCount++;
         }
 
         return deleteCount;
     }
 
+    /**
+     * This method copies a input stream into an output stream
+     *
+     * @param is InputStream the input stream
+     * @param os OutputStream the output stream
+     */
     public static void copyStream(InputStream is, OutputStream os) {
         final int buffer_size = 1024;
         try {

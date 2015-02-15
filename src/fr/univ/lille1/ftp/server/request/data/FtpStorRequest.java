@@ -10,7 +10,11 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpUtils;
 
 /**
- * Created by Warnant on 10-02-15.
+ * FtpStorRequest is the ftp request that allows the user
+ * to put a file from local client space to the ftp server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
  */
 public class FtpStorRequest extends FtpDataRequest {
 

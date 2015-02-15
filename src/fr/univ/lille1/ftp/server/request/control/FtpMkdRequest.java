@@ -9,11 +9,24 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpPath;
 import fr.univ.lille1.ftp.util.FtpUtils;
 
+/**
+ * FtpMkdRequest is the class associated to the (X)MKD ftp request
+ * (X)MKD allows the user to create a new directory on the ftp server
+ *
+ * @author Quentin Warnant
+ * @version 1.0
+ */
 public class FtpMkdRequest extends FtpRequest {
 
     private String username;
     private String currentDirectory;
 
+    /**
+     * Class constructor
+     * @param commandLine String the request client command line
+     * @param currentDirectory String the user current directory on the ftp server
+     * @param username String the current username
+     */
 	public FtpMkdRequest(String commandLine, String currentDirectory, String username) {
 		super(commandLine);
         this.username = username;
