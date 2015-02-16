@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import fr.univ.lille1.ftp.util.FtpConstants;
+import fr.univ.lille1.ftp.util.FtpLogger;
 
 /**
  * FtpServer is the class that handles the main server socket
@@ -15,6 +16,8 @@ import fr.univ.lille1.ftp.util.FtpConstants;
 public class FtpServer {
 
     private ServerSocket serverSocket;
+
+    private static FtpLogger ftpLogger;
     private static String ftpDirectory;
 
     /**
@@ -22,10 +25,12 @@ public class FtpServer {
      *
      * @param ftpDirectory String the default directory of the ftp
      * @param ftpPort      int the default ftp server port
+     * @param logfilePath  String the path of ftp log file
      * @throws IOException
      */
-    public FtpServer(String ftpDirectory, int ftpPort) throws IOException {
+    public FtpServer(String ftpDirectory, String logfilePath, int ftpPort) throws IOException {
         this.ftpDirectory = ftpDirectory;
+        this.ftpLogger = new FtpLogger(logfilePath);
         this.serverSocket = new ServerSocket(ftpPort);
     }
 
@@ -36,10 +41,9 @@ public class FtpServer {
         if (this.serverSocket != null)
             try {
                 this.serverSocket.close();
+                this.ftpLogger.close();
             } catch (IOException e) {
-                if (FtpConstants.DEBUG_ENABLED) {
-                    System.out.println(e.getMessage());
-                }
+                FtpServer.getFtpLogger().error(e.getMessage());
             }
     }
 
@@ -63,6 +67,15 @@ public class FtpServer {
      */
     public static String getFtpDirectory() {
         return ftpDirectory;
+    }
+
+    /**
+     * This method returns the current ftp logger object of the server
+     *
+     * @return FtpLogger the current ftp logger
+     */
+    public static FtpLogger getFtpLogger() {
+        return ftpLogger;
     }
 
 }

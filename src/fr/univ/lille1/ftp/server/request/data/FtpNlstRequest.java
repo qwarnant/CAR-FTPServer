@@ -1,5 +1,6 @@
 package fr.univ.lille1.ftp.server.request.data;
 
+import fr.univ.lille1.ftp.server.FtpServer;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
 import fr.univ.lille1.ftp.util.FtpPath;
@@ -13,7 +14,7 @@ import java.net.Socket;
 /**
  * FtpNlstRequest is the ftp request that allows the user
  * to list a directory on the ftp server
- * Similar to LIST request
+ * Similar to LIST request with less information available for the files
  *
  * @author Quentin Warnant
  * @version 1.0
@@ -22,6 +23,14 @@ public class FtpNlstRequest extends FtpDataRequest {
 
     private FtpPath targetDirectoryPath;
 
+    /**
+     * Class constructor
+     *
+     * @param commandLine      String the input client command line
+     * @param currentDirectory String the current ftp server directory
+     * @param currentType      char the current transfer mode type
+     * @param socket           Socket the current data socket connection
+     */
     public FtpNlstRequest(String commandLine, String currentDirectory, char currentType,
                           Socket socket) {
         super(commandLine, currentDirectory, currentType, socket);
@@ -40,10 +49,9 @@ public class FtpNlstRequest extends FtpDataRequest {
         }
 
         // Write the file list on the socket
-        String fileList = FtpUtils.listFilesInFolder(targetDirectory, false);
-        if (FtpConstants.DEBUG_ENABLED) {
-            System.out.println(fileList);
-        }
+        String fileList = FtpUtils.listFilesInFolder(targetDirectory, false, false);
+        FtpServer.getFtpLogger().info(fileList);
+
         this.out.writeBytes(fileList);
 
         // Close the data socket

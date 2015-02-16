@@ -57,7 +57,7 @@ public class FtpRmdRequest extends FtpRequest {
         }
 
         int deleteCount = FtpUtils.deleteFilesInFolder(targetDirectory);
-        if(FtpConstants.DEBUG_ENABLED) {
+        if(FtpConstants.LOGGER_ENABLED) {
             System.out.println("Delete file count : " + deleteCount);
         }
 

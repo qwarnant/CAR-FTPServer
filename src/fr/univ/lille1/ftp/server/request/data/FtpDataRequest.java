@@ -12,7 +12,7 @@ import fr.univ.lille1.ftp.server.request.FtpResponse;
  * FtpDataRequest is the class that handles all the ftp transfer data requests
  * with a custom data socket for the transfer
  * <p/>
- * Includes NLST (LIST), RETR and STOR requests
+ * Includes NLST, LIST, RETR and STOR requests
  *
  * @author Quentin Warnant
  * @version 1.0

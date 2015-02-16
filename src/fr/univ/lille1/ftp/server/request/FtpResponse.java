@@ -42,6 +42,6 @@ public class FtpResponse {
 
     @Override
     public String toString() {
-        return this.getCode() + " " + this.getMessage() + "\n";
+        return this.getCode() + " " + this.getMessage() + "\r\n";
     }
 }

@@ -30,6 +30,14 @@ public class FtpPortRequest extends FtpRequest {
     }
 
     public FtpResponse process() throws IOException {
+
+        // Syntax error
+        if (this.commandLine.length() < 5) {
+            return new FtpResponse(
+                    FtpConstants.FTP_ERR_SYNTAX_CODE,
+                    FtpConstants.FTP_ERR_SYNTAX_MSG);
+        }
+
         String portCommand = this.commandLine.substring(5, commandLine.length());
         String[] portCommandParts = portCommand.split(",");
 

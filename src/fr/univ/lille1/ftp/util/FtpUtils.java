@@ -1,8 +1,6 @@
 package fr.univ.lille1.ftp.util;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * FtpUtils is an utility class which contains all utility
@@ -88,27 +86,59 @@ public class FtpUtils {
      *
      * @param folder    File the current folder
      * @param recursive boolean true if the search must be recursive, false otherwise
+     * @param verbose   boolean true if all information of the file must be gotten, false otherwise
      * @return String the file sub-list
      */
-    public static String listFilesInFolder(final File folder, boolean recursive) {
+    public static String listFilesInFolder(final File folder, boolean recursive, boolean verbose) {
         String folderFiles = "";
 
         if (folder == null || folder.listFiles() == null) {
             return folderFiles;
         }
 
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                if (recursive) {
-                    folderFiles += listFilesInFolder(fileEntry, true) + "\n";
+        // Check if the current system is Linux
+        if (verbose && !System.getProperty("os.name").startsWith("Win")) {
+            folderFiles += executeShellCommand("ls -l " + folder.getAbsolutePath());
+        } else {
+            for (final File fileEntry : folder.listFiles()) {
+                if (fileEntry.isDirectory()) {
+                    if (recursive) {
+                        folderFiles += listFilesInFolder(fileEntry, true, verbose) + "\n";
+                    } else {
+                        folderFiles += fileEntry.getName() + "/\n";
+                    }
                 } else {
-                    folderFiles += fileEntry.getName() + "/\n";
+                    folderFiles += fileEntry.getName() + "\n";
                 }
-            } else {
-                folderFiles += fileEntry.getName() + "\n";
             }
         }
+
         return folderFiles;
+    }
+
+    /**
+     * This method executes a shell command from Java
+     *
+     * @param commandName String the requested command name with args
+     * @return String the output of the command processing
+     */
+    public static String executeShellCommand(String commandName) {
+        String result = "";
+        try {
+            Process p = Runtime.getRuntime().exec(commandName);
+            p.waitFor();
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                result += line + "\n";
+            }
+
+            return result;
+        } catch (Exception e) {
+            return result;
+        }
     }
 
     /**

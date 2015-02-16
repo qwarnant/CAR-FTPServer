@@ -14,6 +14,7 @@ import java.util.List;
 import fr.univ.lille1.ftp.server.request.FtpRequest;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.server.request.control.*;
+import fr.univ.lille1.ftp.server.request.data.FtpListRequest;
 import fr.univ.lille1.ftp.server.request.data.FtpNlstRequest;
 import fr.univ.lille1.ftp.server.request.data.FtpRetrRequest;
 import fr.univ.lille1.ftp.server.request.data.FtpStorRequest;
@@ -42,7 +43,6 @@ public class FtpThread extends Thread {
     private DataOutputStream controlOutStream;
 
     private Socket dataSocket;
-    private DataOutputStream dataOutStream;
     private int dataPort;
 
     /**
@@ -74,7 +74,7 @@ public class FtpThread extends Thread {
     public void run() {
 
         try {
-            if (FtpConstants.DEBUG_ENABLED) {
+            if (FtpConstants.LOGGER_ENABLED) {
                 System.out.println("Starting the FTP Thread #" + this.id);
             }
 
@@ -94,11 +94,11 @@ public class FtpThread extends Thread {
             }
 
         } catch (IOException e) {
-            if (FtpConstants.DEBUG_ENABLED) {
+            if (FtpConstants.LOGGER_ENABLED) {
                 System.out.println("Client disconnected");
             }
         } finally {
-            if (FtpConstants.DEBUG_ENABLED) {
+            if (FtpConstants.LOGGER_ENABLED) {
                 System.out.println("End of the FTP Thread #" + this.id);
             }
         }
@@ -123,12 +123,12 @@ public class FtpThread extends Thread {
             String commandLine = br.readLine();
 
             // Bad writing on the socket
-            if(commandLine == null) {
+            if (commandLine == null) {
                 return;
             }
             String command = commandLine.split(" ")[0];
 
-            if (FtpConstants.DEBUG_ENABLED) {
+            if (FtpConstants.LOGGER_ENABLED) {
                 System.out.println(commandLine);
             }
 
@@ -152,10 +152,9 @@ public class FtpThread extends Thread {
                 FtpPortRequest rport = new FtpPortRequest(commandLine);
                 this.storeAndExecute(rport);
 
-                this.dataSocket = new Socket(rport.getRemoteIp(), rport.getRemotePort());
-
-                if (FtpConstants.DEBUG_ENABLED) {
-                    System.out.println("Remote data connection on : " + this.dataSocket.getRemoteSocketAddress());
+                if (rport.getRemotePort() != 0 && rport.getRemoteIp() != null) {
+                    this.dataSocket = new Socket(rport.getRemoteIp(), rport.getRemotePort());
+                    FtpServer.getFtpLogger().info("Remote data connection on : " + this.dataSocket.getRemoteSocketAddress());
                 }
 
             } else if (command.equals(FtpConstants.FTP_CMD_PASV)) {
@@ -164,9 +163,13 @@ public class FtpThread extends Thread {
                 FtpPasvRequest rpasv = new FtpPasvRequest(commandLine);
                 this.storeAndExecute(rpasv);
 
-                ServerSocket socket = new ServerSocket(rpasv.getLocalPort());
-                this.dataPort = rpasv.getLocalPort();
-                this.dataSocket = socket.accept();
+                if (rpasv.getLocalPort() != 0) {
+                    FtpServer.getFtpLogger().info("Accept data connection from port : " + rpasv.getLocalPort());
+
+                    ServerSocket socket = new ServerSocket(rpasv.getLocalPort());
+                    this.dataPort = rpasv.getLocalPort();
+                    this.dataSocket = socket.accept();
+                }
 
             } else if (command.equals(FtpConstants.FTP_CMD_TYPE)) {
 
@@ -200,8 +203,19 @@ public class FtpThread extends Thread {
                 this.storeAndExecute(rcwd);
 
                 this.currentDirectory = rcwd.getNewCurrentDirectory();
+            } else if (command.equals(FtpConstants.FTP_CMD_LIST)) {
 
-            } else if (command.equals(FtpConstants.FTP_CMD_NLST) || command.equals(FtpConstants.FTP_CMD_LIST)) {
+                // Make a LIST request
+                FtpListRequest rlist = new FtpListRequest(commandLine,
+                        this.currentDirectory,
+                        this.currentType,
+                        this.dataSocket);
+
+                FtpResponse prepareResponse = rlist.prepare();
+                this.controlOutStream.writeBytes(prepareResponse.toString());
+
+                this.storeAndExecute(rlist);
+            } else if (command.equals(FtpConstants.FTP_CMD_NLST)) {
 
                 // Make a NLST request
                 FtpNlstRequest rnlst = new FtpNlstRequest(commandLine,
@@ -266,6 +280,8 @@ public class FtpThread extends Thread {
 
         } catch (IOException e) {
             // Client disconnect : end of the thread and free the data port if needed
+            FtpServer.getFtpLogger().error("Internal error on the server, closing the thread #" + this.id);
+
             this.running = false;
             FtpPortManager.getInstance().freePort(this.dataPort);
         }
@@ -283,10 +299,8 @@ public class FtpThread extends Thread {
 
         FtpResponse response = request.process();
 
-        if (FtpConstants.DEBUG_ENABLED) {
-            System.out.println(request);
-            System.out.println(response);
-        }
+        FtpServer.getFtpLogger().info(request.toString());
+        FtpServer.getFtpLogger().info(response.toString());
 
         // Write the answer to the socket
         controlOutStream.writeBytes(response.toString());

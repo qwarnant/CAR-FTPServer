@@ -20,6 +20,15 @@ public class FtpStorRequest extends FtpDataRequest {
 
     private String username;
 
+    /**
+     * Class constructor
+     *
+     * @param commandLine      String the input client command line
+     * @param currentDirectory String the current ftp server directory
+     * @param currentType      char the current transfer mode type
+     * @param socket           Socket the current data socket connection
+     * @param username         String the current ftp client user name
+     */
     public FtpStorRequest(String commandLine, String currentDirectory, String username, char currentType,
                           Socket socket) {
         super(commandLine, currentDirectory, currentType, socket);

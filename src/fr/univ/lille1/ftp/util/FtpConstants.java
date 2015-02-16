@@ -12,11 +12,12 @@ public interface FtpConstants {
     /**
      * General FTP server constants
      */
-	public static final boolean DEBUG_ENABLED = true;
+	public static final boolean LOGGER_ENABLED = true;
     public static final boolean IS_ANONYMOUS_MODE_ENABLED = true;
     public static final boolean CAN_ANONYNOUS_WRITE = true;
     public static final String FTP_HOST_NAME = "127.0.0.1";
     public static final int FTP_SERVER_PORT = 1024;
+    public static final String FTP_LOGGER_NAME = "ftplog";
 
     /**
      * Test account information constants

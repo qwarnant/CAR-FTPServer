@@ -3,6 +3,7 @@ package fr.univ.lille1.ftp.server.request.control;
 import java.io.File;
 import java.io.IOException;
 
+import fr.univ.lille1.ftp.server.FtpServer;
 import fr.univ.lille1.ftp.server.request.FtpRequest;
 import fr.univ.lille1.ftp.server.request.FtpResponse;
 import fr.univ.lille1.ftp.util.FtpConstants;
@@ -43,9 +44,19 @@ public class FtpCwdRequest extends FtpRequest {
         // Check directory exists
         if (targetDirectory == null || !targetDirectory.exists()
                 && !targetDirectory.isDirectory()) {
+            this.newCurrentDictory = this.currentDirectory;
             return new FtpResponse(FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
                     "'" + targetDirectoryPath + "' : "
                             + FtpConstants.FTP_ERR_FILE_NO_EXISTS_MSG);
+        }
+
+        // Check if the directory is accessible
+        if(!targetDirectoryPath.getPath().contains(FtpServer.getFtpDirectory())) {
+            this.newCurrentDictory = this.currentDirectory;
+            return new FtpResponse(
+                    FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
+                    FtpConstants.FTP_ERR_ACCESS_DENIED_MSG
+            );
         }
 
         this.newCurrentDictory = targetDirectoryPath.getPath();
