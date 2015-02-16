@@ -121,6 +121,11 @@ public class FtpThread extends Thread {
 
             // Read the request type
             String commandLine = br.readLine();
+
+            // Bad writing on the socket
+            if(commandLine == null) {
+                return;
+            }
             String command = commandLine.split(" ")[0];
 
             if (FtpConstants.DEBUG_ENABLED) {
