@@ -12,13 +12,13 @@ import java.net.UnknownHostException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TestUserPass is the unit test class which tests all the
+ * TestUser is the unit test class which tests all the
  * USER and PASS use cases on the ftp server
  *
  * @author Quentin Warnant
  * @version 1.0
  */
-public class TestUserPass {
+public class TestUser {
 
     private static FTPClient client;
 
