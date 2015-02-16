@@ -39,6 +39,12 @@ public class FtpNlstRequest extends FtpDataRequest {
     @Override
     public FtpResponse process() throws IOException {
 
+        // Check if the data connection has been established before the processing
+        if(this.dataSocket == null) {
+            return new FtpResponse(FtpConstants.FTP_ERR_CONNECTION_FAILED_CODE,
+                    FtpConstants.FTP_ERR_CONNECTION_FAILED_MSG);
+        }
+
         File targetDirectory = new File(this.targetDirectoryPath.getPath());
         // Check directory exists
         if (targetDirectory == null || !targetDirectory.exists()
@@ -65,6 +71,13 @@ public class FtpNlstRequest extends FtpDataRequest {
     @Override
     public FtpResponse prepare() {
         try {
+
+            // Check if the data socket has been opened
+            if(this.dataSocket == null) {
+                return new FtpResponse(FtpConstants.FTP_ERR_CONNECTION_FAILED_CODE,
+                        FtpConstants.FTP_ERR_CONNECTION_FAILED_MSG);
+            }
+
             this.out = new DataOutputStream(dataSocket.getOutputStream());
             this.targetDirectoryPath = FtpUtils.extractArgumentFromCommandLine(this.commandLine, this.currentDirectory);
 

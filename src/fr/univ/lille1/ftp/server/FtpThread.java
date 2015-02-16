@@ -280,7 +280,7 @@ public class FtpThread extends Thread {
 
         } catch (IOException e) {
             // Client disconnect : end of the thread and free the data port if needed
-            FtpServer.getFtpLogger().error("Internal error on the server, closing the thread #" + this.id);
+            FtpServer.getFtpLogger().error("Internal error on the server, closing the thread #" + this.id + " with error " + e.getMessage());
 
             this.running = false;
             FtpPortManager.getInstance().freePort(this.dataPort);

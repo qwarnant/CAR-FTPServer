@@ -1,15 +1,15 @@
 package fr.univ.lille1.ftp.tests;
 
-import fr.univ.lille1.ftp.client.FtpClient;
 import fr.univ.lille1.ftp.util.FtpConstants;
-import org.junit.*;
+import org.apache.commons.net.ftp.FTPClient;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.*;
+import java.net.UnknownHostException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * TestUserPass is the unit test class which tests all the
@@ -20,27 +20,15 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestUserPass {
 
-    private static SocketAddress sa;
-    private static FtpClient normalClient;
-    private static FtpClient anonymousClient;
-
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        sa = new InetSocketAddress(
-                InetAddress.getByName(FtpConstants.FTP_HOST_NAME),
-                FtpConstants.FTP_SERVER_PORT);
-    }
+    private static FTPClient client;
 
     @Before
     public void setUp() throws Exception {
 
         try {
 
-            normalClient = new FtpClient(new Socket(), FtpConstants.FTP_TEST_USERNAME, FtpConstants.FTP_TEST_PASSWORD);
-            normalClient.connect(sa);
-            anonymousClient = new FtpClient(new Socket(), FtpConstants.FTP_ANONYMOUS_NAME, FtpConstants.FTP_TEST_PASSWORD);
-            anonymousClient.connect(sa);
+            client = new FTPClient();
+            client.connect(FtpConstants.FTP_HOST_NAME, FtpConstants.FTP_SERVER_PORT);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -49,30 +37,25 @@ public class TestUserPass {
         }
     }
 
+    @After
+    public void setUpAfter() throws Exception {
+        if (client.isConnected()) {
+            client.quit();
+        }
+    }
+
     @Test
     public void testUserNormalRequestOk() {
 
         try {
 
-                // Get the input stream
-                InputStreamReader isr = new InputStreamReader(
-                        normalClient.getControlSocket().getInputStream());
-                BufferedReader br = new BufferedReader(isr);
-
-                String commandLine = br.readLine().trim();
-          //  normalClient.doUserRequest();
-
-         //   commandLine = br.readLine().trim();
-                System.out.println(commandLine);
-
-                int resultCode = Integer.parseInt(commandLine.substring(0, 3));
-
-                System.out.println(resultCode);
-                System.out.println(commandLine);
+            int resultCode = client.user(FtpConstants.FTP_TEST_USERNAME);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    resultCode);
 
 
-
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -82,11 +65,13 @@ public class TestUserPass {
     public void testUserAnonymousRequestOk() {
 
         try {
-            normalClient.doUserRequest();
+            int resultCode = client.user(FtpConstants.FTP_ANONYMOUS_NAME);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    resultCode);
 
 
-
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -95,31 +80,86 @@ public class TestUserPass {
 
     @Test
     public void testUserRequestKo() {
-        assertTrue(true);
-    }
 
-    @Test
-    public void testPassRequestOk() {
-        assertTrue(true);
-    }
-
-    public void testQuitRequestOk() {
         try {
-            normalClient.doQuitRequest();
-            anonymousClient.doQuitRequest();
+            int resultCode = client.user("janedoe");
+            assertEquals("Result code should be " + FtpConstants.FTP_ERR_INVALID_USER_PWD_CODE,
+                    FtpConstants.FTP_ERR_INVALID_USER_PWD_CODE,
+                    resultCode);
 
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @After
-    public void setUpAfter() throws Exception {
+    @Test
+    public void testNormalPassRequestOk() {
+        try {
+            int resultCode = client.user(FtpConstants.FTP_TEST_USERNAME);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    resultCode);
+            resultCode = client.pass(FtpConstants.FTP_TEST_PASSWORD);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                    FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                    resultCode);
 
-        normalClient.doQuitRequest();
-        anonymousClient.doQuitRequest();
-        normalClient.close();
-        anonymousClient.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
+    @Test
+    public void testNormalPassRequestKo() {
+        try {
+            int resultCode = client.user(FtpConstants.FTP_TEST_USERNAME);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    resultCode);
+            resultCode = client.pass("foobar");
+            assertEquals("Result code should be " + FtpConstants.FTP_ERR_INVALID_USER_PWD_CODE,
+                    FtpConstants.FTP_ERR_INVALID_USER_PWD_CODE,
+                    resultCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void testAnonymousPassRequestOk() {
+        try {
+            int resultCode = client.user(FtpConstants.FTP_ANONYMOUS_NAME);
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_NEED_USER_CODE,
+                    FtpConstants.FTP_REP_NEED_USER_CODE,
+                    resultCode);
+            resultCode = client.pass("foobar");
+            assertEquals("Result code should be " + FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                    FtpConstants.FTP_REP_LOGIN_OK_CODE,
+                    resultCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void testBadUserPassRequest() {
+        try {
+            int resultCode = client.pass(FtpConstants.FTP_TEST_PASSWORD);
+            assertEquals("Result code should be " + FtpConstants.FTP_ERR_BAD_SEQ_CODE,
+                    FtpConstants.FTP_ERR_BAD_SEQ_CODE,
+                    resultCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }
