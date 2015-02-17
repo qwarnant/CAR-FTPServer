@@ -3,7 +3,7 @@
 * Développement d'un serveur FTP en Java
 * Quentin Warnant
 * 17/02/15
-* La version en ligne (syntaxe, couleurs) de ce README et est disponible à l'adresse https://github.com/qwarnant/CAR-FTPServer
+* La version en ligne (syntaxe, couleurs) de ce README est disponible à l'adresse https://github.com/qwarnant/CAR-FTPServer
 
 HOW TO
 ------------
