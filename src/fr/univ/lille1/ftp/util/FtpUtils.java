@@ -54,10 +54,10 @@ public class FtpUtils {
     public static String refactorPath(String currentPath) {
         if (currentPath == null) return "";
 
-        String separatorRegex = (System.getProperty("os.name")
-                .startsWith("Win")) ? "\\\\" : "/";
-        String separatorToken = (System.getProperty("os.name")
-                .startsWith("Win")) ? "\\" : "/";
+        boolean useSlashes = currentPath.contains("/");
+        
+        String separatorRegex = (!useSlashes) ? "\\\\" : "/";
+        String separatorToken = (!useSlashes) ? "\\" : "/";
 
         String[] paths = currentPath.split(separatorRegex);
 
