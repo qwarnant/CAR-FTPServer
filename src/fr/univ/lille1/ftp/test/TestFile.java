@@ -1,4 +1,4 @@
-package fr.univ.lille1.ftp.tests;
+package fr.univ.lille1.ftp.test;
 
 import fr.univ.lille1.ftp.util.FtpConstants;
 import org.apache.commons.net.ftp.FTPClient;
@@ -14,17 +14,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * TestUserPass is the unit test class which tests all the
+ * TestFile is the unit test class which test all the
  * file management use cases on the ftp server
  *
  * @author Quentin Warnant
  * @version 1.0
  */
-public class TestFilePass {
+public class TestFile {
 
     private static FTPClient client;
     private static long lastTimestamp;
 
+    /**
+     * This method sets up the ftp client before each test
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -41,6 +45,10 @@ public class TestFilePass {
         }
     }
 
+    /**
+     * This method closes the ftp client connection after all tests
+     * @throws Exception
+     */
     @AfterClass
     public static void setUpAfter() throws Exception {
         if (client.isConnected()) {
@@ -49,11 +57,18 @@ public class TestFilePass {
         }
     }
 
+    /**
+     * This method disconnects the ftp client user after each test
+     * @throws Exception
+     */
     @After
     public  void after() throws Exception {
         client.logout();
     }
 
+    /**
+     * This method tests the PORT command on the server
+     */
     @Test
     public void testPortRequestOk() {
 
@@ -71,6 +86,9 @@ public class TestFilePass {
 
     }
 
+    /**
+     * This method tests to STOR a new file with PORT data connection on the server
+     */
     @Test
     public void testStorPortRequestOk() {
 
@@ -87,7 +105,6 @@ public class TestFilePass {
             assertTrue("The result should be true", ok);
 
             fs.close();
-            //client.logout();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,11 +112,13 @@ public class TestFilePass {
 
     }
 
+    /**
+     * This method tests to RETR a file with PORT data connection on the server
+     */
     @Test
     public void testRetrPortRequestOk() {
 
         try {
-
             String filename = lastTimestamp + ".temp";
             File file = new File("data/" + filename);
             file.createNewFile();
@@ -110,7 +129,6 @@ public class TestFilePass {
             assertTrue("The result should be true", ok);
 
             os.close();
-            //client.logout();
 
         } catch (Exception e) {
             e.printStackTrace();

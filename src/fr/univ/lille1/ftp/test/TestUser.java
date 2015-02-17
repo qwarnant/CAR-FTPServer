@@ -1,4 +1,4 @@
-package fr.univ.lille1.ftp.tests;
+package fr.univ.lille1.ftp.test;
 
 import fr.univ.lille1.ftp.util.FtpConstants;
 import org.apache.commons.net.ftp.FTPClient;
@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TestUser is the unit test class which tests all the
+ * TestUser is the unit test class which test all the
  * USER and PASS use cases on the ftp server
  *
  * @author Quentin Warnant
@@ -22,6 +22,10 @@ public class TestUser {
 
     private static FTPClient client;
 
+    /**
+     * This method sets up the ftp client before each test
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -37,6 +41,10 @@ public class TestUser {
         }
     }
 
+    /**
+     * This method closes the ftp client user after each test
+     * @throws Exception
+     */
     @After
     public void setUpAfter() throws Exception {
         if (client.isConnected()) {
@@ -44,6 +52,9 @@ public class TestUser {
         }
     }
 
+    /**
+     * This method tests a good username with USER command on the server
+     */
     @Test
     public void testUserNormalRequestOk() {
 
@@ -61,6 +72,9 @@ public class TestUser {
 
     }
 
+    /**
+     * This method tests the anonymous username with USER command on the server
+     */
     @Test
     public void testUserAnonymousRequestOk() {
 
@@ -77,7 +91,9 @@ public class TestUser {
 
     }
 
-
+    /**
+     * This method tests a bad username with USER command on the server
+     */
     @Test
     public void testUserRequestKo() {
 
@@ -93,6 +109,9 @@ public class TestUser {
         }
     }
 
+    /**
+     * This method tests a normal USER/PASS matching on the server
+     */
     @Test
     public void testNormalPassRequestOk() {
         try {
@@ -111,6 +130,9 @@ public class TestUser {
 
     }
 
+    /**
+     * This method tests a bad USER/PASS matching on the server
+     */
     @Test
     public void testNormalPassRequestKo() {
         try {
@@ -129,6 +151,9 @@ public class TestUser {
 
     }
 
+    /**
+     * This method tests the anonymous connection on the server
+     */
     @Test
     public void testAnonymousPassRequestOk() {
         try {
@@ -147,6 +172,9 @@ public class TestUser {
 
     }
 
+    /**
+     * This method tests the behaviour of a bad sequence in the USER/PASS requests on the server
+     */
     @Test
     public void testBadUserPassRequest() {
         try {

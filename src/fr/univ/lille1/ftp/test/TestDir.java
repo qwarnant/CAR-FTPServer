@@ -1,4 +1,4 @@
-package fr.univ.lille1.ftp.tests;
+package fr.univ.lille1.ftp.test;
 
 import fr.univ.lille1.ftp.util.FtpConstants;
 import org.apache.commons.net.ftp.FTPClient;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * TestUserPass is the unit test class which tests all the
+ * TestDir is the unit test class which test all the
  * directory management use cases on the ftp server
  *
  * @author Quentin Warnant
@@ -26,6 +26,10 @@ public class TestDir {
     private static FTPClient client;
     private static long lastTimestamp;
 
+    /**
+     * This method sets up the ftp client before each test
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -42,6 +46,10 @@ public class TestDir {
         }
     }
 
+    /**
+     * This method closes the ftp client connection after all tests
+     * @throws Exception
+     */
     @AfterClass
     public static void setUpAfter() throws Exception {
         if (client.isConnected()) {
@@ -50,11 +58,18 @@ public class TestDir {
         }
     }
 
+    /**
+     * This method disconnects the ftp client user after each test
+     * @throws Exception
+     */
     @After
     public void after() throws Exception {
         client.logout();
     }
 
+    /**
+     * This method tests if the CWD command can change the current directory to the test directory
+     */
     @Test
     public void testCWDRequestOk() {
         try {
@@ -67,6 +82,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the CWD command can change the current directory to a missing directory
+     */
     @Test
     public void testCWDRequestKo() {
         try {
@@ -78,6 +96,9 @@ public class TestDir {
         }
     }
 
+    /**
+     * This method tests if the CDUP command can change the current directory to the top directory of the server
+     */
     @Test
     public void testCdupRequestOk() {
         try {
@@ -93,6 +114,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the CDUP command can change the current directory outside the main directory
+     */
     @Test
     public void testCdupRequestAccessDenied() {
         try {
@@ -107,21 +131,10 @@ public class TestDir {
 
     }
 
-    @Test
-    public void testCdupRequest() {
-        try {
-            int resultCode = client.cdup();
-            assertEquals("Result code should be " + FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
-                    FtpConstants.FTP_ERR_ACTION_NOT_TAKEN,
-                    resultCode);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
+    /**
+     * This method tests if the NLST command can list the current directory files
+     * without data connection  
+     */
     @Test
     public void testNlstRequestKo() {
         try {
@@ -136,7 +149,9 @@ public class TestDir {
 
     }
 
-
+    /**
+     * This method tests if the NLST command can list the current directory files
+     */
     @Test
     public void testNlstRequestOk() {
         try {
@@ -153,6 +168,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the LIST command can list the current directory files
+     */
     @Test
     public void testListRequestOk() {
         try {
@@ -170,6 +188,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the NLST command can list the request directory files
+     */
     @Test
     public void testNlstDirectoryRequestOk() {
         try {
@@ -185,6 +206,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the LIST command can list the request directory files
+     */
     @Test
     public void testListDirectoryRequestOk() {
         try {
@@ -201,6 +225,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the MKD command can create a directory
+     */
     @Test
     public void testListMkdRequestOk() {
         try {
@@ -218,6 +245,9 @@ public class TestDir {
 
     }
 
+    /**
+     * This method tests if the RMD command can remove a directory
+     */
     @Test
     public void testListRmdRequestOk() {
         try {

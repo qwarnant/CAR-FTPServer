@@ -4,4 +4,4 @@
  * @author Quentin Warnant
  * @version 1.0
  */
-package fr.univ.lille1.ftp.tests;
+package fr.univ.lille1.ftp.test;
