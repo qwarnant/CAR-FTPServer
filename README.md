@@ -1,16 +1,18 @@
 # CAR-FTPServer
 =====================
-Développement d'un serveur FTP en Java
-Quentin Warnant
-17/02/15
+* Développement d'un serveur FTP en Java
+* Quentin Warnant
+* 17/02/15
+* La version en ligne (syntaxe, couleurs) de ce README et est disponible à l'adresse https://github.com/qwarnant/CAR-FTPServer
 
 HOW TO
 ------------
 ```bash
     java -jar tp01-quentin-warnant.jar ftpMainDirectory ftpLoggerLogFile
 ```
-* Le dossier spécifié en paramètre pour le serveur ftp doit avoir les permissions en 664 au moins.
+* Le dossier spécifié en paramètre pour le serveur ftp doit avoir les permissions en 664 au moins. Ne pas oublier le slash final.
 * Le fichier spécifié en paramètre pour le logger doit avoir été créé et doit avoir les permissions en 664 au moins.
+* Le compte utilisateur test du serveur en mode authentifié est johndoe, son mot de passe est foo.
 
 Introduction
 ------------

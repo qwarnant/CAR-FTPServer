@@ -53,8 +53,16 @@ public class FtpUtils {
      */
     public static String refactorPath(String currentPath) {
         if (currentPath == null) return "";
-        String[] paths = currentPath.split("\\\\");
-        String resultPath = "";
+
+        String separatorRegex = (System.getProperty("os.name")
+                .startsWith("Win")) ? "\\\\" : "/";
+        String separatorToken = (System.getProperty("os.name")
+                .startsWith("Win")) ? "\\" : "/";
+
+        String[] paths = currentPath.split(separatorRegex);
+
+        String resultPath = (System.getProperty("os.name").startsWith("Win")) ? ""
+                : "/";
 
         int lastIndex = 0;
         boolean up = false;
@@ -74,7 +82,7 @@ public class FtpUtils {
             if (token.equals("..") || token.trim().isEmpty()) {
                 continue;
             }
-            resultPath += token + "\\";
+            resultPath += token + separatorToken;
 
         }
 
