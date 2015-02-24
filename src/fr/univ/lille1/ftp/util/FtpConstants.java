@@ -53,6 +53,7 @@ public interface FtpConstants {
     public static final String FTP_CMD_RETR = "RETR";
     public static final String FTP_CMD_STOR = "STOR";
     public static final String FTP_CMD_QUIT = "QUIT";
+    public static final String FTP_CMD_SYST = "SYST";
 
     /**
      * FTP request/response message and code constants
@@ -63,6 +64,8 @@ public interface FtpConstants {
 	public static final int FTP_REP_CMD_OK_CODE = 200;
 	public static final String FTP_REP_CMD_MSG = "command successful.";
 	public static final String FTP_REP_TYPE_CMD_MSG = "Type set to %s.";
+	
+	public static final int FTP_REP_SYST_CODE = 215;
 
 	public static final int FTP_REP_READY_CODE = 220;
 	public static final String FTP_REP_READY_MSG = "The date and time is ";

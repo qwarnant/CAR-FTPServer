@@ -1,0 +1,98 @@
+24 févr. 2015 17:56:48 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: USER johndoe
+24 févr. 2015 17:56:48 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 331 User name okay, need password.
+
+24 févr. 2015 17:56:49 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PASS foo
+24 févr. 2015 17:56:49 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 230 User logged in, proceed. Logged out if appropriate.
+
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PASV
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 227 Entering Passive Mode (127,0,0,1,18,104)
+
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: Accept data connection from port : 4712
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: total 12
+-rw-r--r-- 1 warnant m1  692 févr. 24 17:56 logFile.txt
+-rw-r--r-- 1 warnant m1   94 févr. 24 17:10 logFile.txt.1
+-rw-r--r-- 1 warnant m1    0 févr. 24 17:56 logFile.txt.lck
+drwxr-xr-x 2 warnant m1 4096 févr. 24 17:12 test2
+-rw-r--r-- 1 warnant m1    0 févr. 16 08:57 test.txt
+
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: LIST
+24 févr. 2015 17:56:52 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 226 Transfer complete.
+
+24 févr. 2015 17:56:58 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: QUIT
+24 févr. 2015 17:56:58 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 221 Goodbye.
+
+24 févr. 2015 17:58:23 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: USER johndoe
+24 févr. 2015 17:58:23 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 331 User name okay, need password.
+
+24 févr. 2015 17:58:23 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PASS foo
+24 févr. 2015 17:58:23 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 230 User logged in, proceed. Logged out if appropriate.
+
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PORT 127,0,0,1,195,3
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 200 PORT command successful.
+
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: Remote data connection on : /127.0.0.1:49923
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: total 12
+-rw-r--r-- 1 warnant m1 2076 févr. 24 17:58 logFile.txt
+-rw-r--r-- 1 warnant m1   94 févr. 24 17:10 logFile.txt.1
+-rw-r--r-- 1 warnant m1    0 févr. 24 17:56 logFile.txt.lck
+drwxr-xr-x 2 warnant m1 4096 févr. 24 17:12 test2
+-rw-r--r-- 1 warnant m1    0 févr. 16 08:57 test.txt
+
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: LIST
+24 févr. 2015 17:58:36 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 226 Transfer complete.
+
+24 févr. 2015 17:58:51 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PORT 127,0,0,1,187,76
+24 févr. 2015 17:58:51 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 200 PORT command successful.
+
+24 févr. 2015 17:58:51 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: Remote data connection on : /127.0.0.1:47948
+24 févr. 2015 17:58:51 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: STOR gl-todo.txt
+24 févr. 2015 17:58:51 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 226 Transfer complete.
+
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PORT 127,0,0,1,155,126
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 200 PORT command successful.
+
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: Remote data connection on : /127.0.0.1:39806
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: total 16
+-rw-r--r-- 1 warnant m1  294 févr. 24 17:58 gl-todo.txt
+-rw-r--r-- 1 warnant m1 3396 févr. 24 17:58 logFile.txt
+-rw-r--r-- 1 warnant m1   94 févr. 24 17:10 logFile.txt.1
+-rw-r--r-- 1 warnant m1    0 févr. 24 17:56 logFile.txt.lck
+drwxr-xr-x 2 warnant m1 4096 févr. 24 17:12 test2
+-rw-r--r-- 1 warnant m1    0 févr. 16 08:57 test.txt
+
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: LIST
+24 févr. 2015 17:58:54 fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 226 Transfer complete.
+
