@@ -1,6 +1,8 @@
 package fr.univ.lille1.ftp.util;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * FtpUtils is an utility class which contains all utility
@@ -132,8 +134,18 @@ public class FtpUtils {
      */
     public static String executeShellCommand(String commandName) {
         String result = "";
+
+        // Put the english locale for the list command
+        Map<String, String> environment = new HashMap<String, String>(System.getenv());
+        environment.put("LC_ALL", "en_EN");
+        String[] envp = new String[environment.size()];
+        int count = 0;
+        for (Map.Entry<String, String> entry : environment.entrySet()) {
+            envp[count++] = entry.getKey() + "=" + entry.getValue();
+        }
+        
         try {
-            Process p = Runtime.getRuntime().exec(commandName);
+            Process p = Runtime.getRuntime().exec(commandName, envp);
             p.waitFor();
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
