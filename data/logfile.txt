@@ -1,0 +1,10 @@
+mars 15, 2015 7:18:16 PM fr.univ.lille1.ftp.util.FtpLogger info
+INFO: USER johndoe
+mars 15, 2015 7:18:16 PM fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 331 User name okay, need password.
+
+mars 15, 2015 7:18:16 PM fr.univ.lille1.ftp.util.FtpLogger info
+INFO: PASS foo
+mars 15, 2015 7:18:16 PM fr.univ.lille1.ftp.util.FtpLogger info
+INFO: 230 User logged in, proceed. Logged out if appropriate.
+
